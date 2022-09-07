@@ -5,7 +5,7 @@ import Mine from "./mine.ts";
 import Repo from "./repo.ts";
 import { Item } from "./item.ts";
 
-const Workflow = async (args: string[]) => {
+export default async function Workflow(args: string[]) {
   const query = args[0];
   const items: Item[] = [];
 
@@ -28,6 +28,4 @@ const Workflow = async (args: string[]) => {
   }
 
   return JSON.stringify({ items });
-};
-
-export default Workflow;
+}

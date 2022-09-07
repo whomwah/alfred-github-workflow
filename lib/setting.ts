@@ -1,7 +1,7 @@
 import Builder from "../helpers/builder.ts";
 import { Item } from "./item.ts";
 
-const Setting = (query: string, listItems: Item[]) => {
+export default function Setting(query: string, listItems: Item[]) {
   const prefix = ">";
   const action = query.split(prefix)[1]?.trim();
   const items = listItems;
@@ -106,6 +106,4 @@ const Setting = (query: string, listItems: Item[]) => {
   return {
     run: async () => await systemCommands(),
   };
-};
-
-export default Setting;
+}
