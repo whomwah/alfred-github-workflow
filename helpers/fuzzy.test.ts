@@ -1,5 +1,5 @@
 import { assert } from "https://deno.land/std@0.154.0/testing/asserts.ts";
-import { fuzzyMatch } from "./builder.ts";
+import fuzzyMatch from "./fuzzy.ts";
 
 Deno.test("It should match various scenarios", () => {
   assert(fuzzyMatch("duncan", "du"));
