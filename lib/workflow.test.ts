@@ -11,7 +11,6 @@ import Workflow from "./workflow.ts";
 import User from "./user.ts";
 import Mine from "./mine.ts";
 import Search from "./search.ts";
-import Repo from "./repo.ts";
 
 Deno.test("It should return a payload", async () => {
   const result = await Workflow(["> "]);

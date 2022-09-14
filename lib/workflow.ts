@@ -1,31 +1,33 @@
-import Search from "./search.ts";
+import { dbConnect, init } from "./setup.ts";
 import Setting from "./setting.ts";
 import User from "./user.ts";
 import Mine from "./mine.ts";
-import Repo from "./repo.ts";
+import Search from "./search.ts";
 import { Item } from "./item.ts";
+import { queryArgs } from "../helpers/query.ts";
+import { uniqByKey } from "../helpers/utils.ts";
 
-export default async function Workflow(args: string[]) {
-  const query = args[0];
+export default async function Workflow(query: string) {
   const items: Item[] = [];
+  const db = await dbConnect();
 
-  switch (true) {
-    case /^>([a-z\s]+)?$/.test(query): {
-      await Setting(query, items).run();
-      break;
+  await init(db, async (config) => {
+    switch (true) {
+      case /^>([a-zA-Z0-9_\s]+)?$/.test(query): {
+        await Setting(queryArgs(query, ">"), items, config);
+        break;
+      }
+      case /^@([a-z-]+(\s+))?([a-z-]+)?$/.test(query):
+        await User(queryArgs(query, "@"), items, config);
+        break;
+      case /^my([a-zA-Z0-9_\s]+)?$/.test(query):
+        await Mine(queryArgs(query, "my"), items, config);
+        break;
+      default:
+        await Search(queryArgs(query), items, config);
     }
-    case /^@(\w*\s?\w+)?$/.test(query):
-      await User.run(query, items);
-      break;
-    case /^my[a-z ]*$/.test(query):
-      await Mine.run(query, items);
-      break;
-    case /^s\s?[\w@]*$/.test(query):
-      await Search.run(query, items);
-      break;
-    default:
-      await Repo.run(query, items);
-  }
+  });
+  db.close();
 
-  return JSON.stringify({ items });
+  return JSON.stringify({ items: uniqByKey("uid", items) });
 }

@@ -1,109 +1,51 @@
-import Builder from "../helpers/builder.ts";
+import Builder, { loginCommands } from "../helpers/builder.ts";
 import { Item } from "./item.ts";
+import { Config } from "../helpers/config.ts";
+import { QueryArgs } from "../helpers/query.ts";
 
-export default function Setting(query: string, listItems: Item[]) {
-  const prefix = ">";
-  const action = query.split(prefix)[1]?.trim();
+export default function Setting(
+  queryArgs: QueryArgs,
+  listItems: Item[],
+  config: Config,
+) {
   const items = listItems;
-  const builder = Builder(items, prefix, action);
+  const builder = Builder(queryArgs, items);
+  const prefix = queryArgs.prefix;
 
-  const systemCommands = async () => {
-    await Promise.all([
-      loginCmd(),
-      logoutCmd(),
-      deleteCacheCmd(),
-      deleteDbCmd(),
-      updateCmd(),
-      activateAutoupdateCmd(),
-      deactivateAutoupdateCmd(),
-      helpCmd(),
-      changelogCmd(),
-    ]);
+  const commands = () => {
+    if (!config.token) return loginCommands(queryArgs, builder);
 
-    return items;
+    const cmds = [
+      {
+        title: `${prefix} logout`,
+        subtitle: "Log out this workflow",
+        arg: `###logout###`,
+        icon: "logout",
+      },
+      {
+        title: `${prefix} delete cache`,
+        subtitle: "Delete cache (forces fresh data to be fetched)",
+        arg: "###cache_delete###",
+        icon: "delete",
+      },
+      {
+        title: `${prefix} delete database`,
+        subtitle: "Delete all data (contains login, config and cache)",
+        arg: "###database_delete###",
+        icon: "delete",
+      },
+      {
+        title: `${prefix} help`,
+        subtitle: "View the README",
+        arg:
+          `${config.baseUrl}/whomwah/alfred-github-workflow/blob/main/README.md`,
+        icon: "help",
+        skipUID: true,
+      },
+    ];
+
+    return Promise.all(cmds.map((cmd) => builder.addItem(cmd)));
   };
 
-  const loginCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "login",
-      subtitle: "Generate OAuth access token",
-      arg:
-        "URL:https://github.com/login/oauth/authorize?client_id=869cbedd6ed52af80986&scope=repo",
-    });
-  };
-
-  const logoutCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "logout",
-      subtitle: "Log out this workflow",
-    });
-  };
-
-  const deleteCacheCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "delete cache",
-      subtitle: "Delete GitHub Cache",
-    });
-  };
-
-  const deleteDbCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "delete database",
-      subtitle: "Delete database (contains login, config and cache)",
-    });
-  };
-
-  const updateCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "update",
-      subtitle: "There is an update for this Alfred workflow",
-    });
-  };
-
-  const activateAutoupdateCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "activate autoupdate",
-      subtitle: "Activate auto updating this Alfred Workflow",
-    });
-  };
-
-  const deactivateAutoupdateCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "deactivate autoupdate",
-      subtitle: "Deactivate auto updating this Alfred Workflow",
-    });
-
-    return items;
-  };
-
-  const helpCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "help",
-      subtitle: "View the README",
-      arg:
-        "URL:  https://github.com/whomwah/alfred-github-workflow/blob/master/README.md",
-    });
-  };
-
-  const changelogCmd = async () => {
-    await builder.addItem({
-      query,
-      title: "changelog",
-      subtitle: "View the CHANGELOG",
-      arg:
-        "URL:https://github.com/whomwah/alfred-github-workflow/blob/master/README.md",
-    });
-  };
-
-  return {
-    run: async () => await systemCommands(),
-  };
+  return commands();
 }
