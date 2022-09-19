@@ -1,28 +1,64 @@
-# An Alfred 5 Workflow for Github
+# An Alfred 5 Workflow for working with Github
 
-Written in TypeScript and running via Deno.
+This workflow is inspired by the original (and still available)
+[Alfred workflow](https://github.com/gharlan/alfred-github-workflow) by
+[Gregor Harlan](https://github.com/gharlan). It came about as a side project as
+I wanted a real use case to try [Deno](https://deno.land/). It's written in
+[TypeScript](https://www.typescriptlang.org/). It contains as many of the
+features in the original that I thought I would use myself and some new ones.
 
-## Introduction
+![Github Alfred 5 Workflow](./assets/workflow.gif)
 
-As usual with these sort of projects, is basically scratching in itch. I have
-been following [Deno](https://deno.land/) since it's conception and am a fan of
-everything it's doing right now. I don't get to use it a lot in my day to day
-development (although I really think this is going to change soon) so wanted a
-side project to give me the opportunity to not only use it but for it to be big
-enough that I could "keep up" with latest Deno changes. The best way of learning
-for me has always been doing.
+## Install
 
-I'm a long time user of [Alfred](https://www.alfredapp.com/) and it's probably
-the most uses bit of software on my machine. I'm not actually sure what I would
-do without it so ingrained in my daily routine that it is.
+This workflow requires the [Deno](https://deno.land/) binary to be installed.
+This can be done simply from the [Deno](https://deno.land/) website above.
 
-One of the workflows I use daily is
-https://github.com/gharlan/alfred-github-workflow. It's indispensable for me.
-It's also a great example of a Alfred workflow with some interesting development
-features like using [SQlite](https://www.sqlite.org/) as a cache.
+> [Deno](https://deno.land/) is a runtime for JavaScript.
+> [Deno](https://deno.land/) was co-created by Ryan Dahl, who also created
+> Node.js.
 
-It's written in PHP, which is not a problem but not a language I personally
-develop in so I'm not able to contribute to the project or extend it. Trying to
-create a new version in TypeScript should be interesting.
+Once installed you can
+[download the latest version](https://github.com/whomwah/alfred-github-workflow/releases)
+and double click the `.workflow` file to open and install or update.
 
-NOTE: It's very much work in progress right now.
+## Usage
+
+By default you access the workflow via the `gh` command.
+
+The first time you use the workflow you will need an access token so the
+workflow can speak to github on your behalf. You can do this via the
+`gh > login` command. Pressing enter will take you to an authorisation page on
+Github. The permissions are used only by the workflow.
+
+There are a few top level commands and other than that you just start typing a
+`repo` or `user` you are interested in. Once you start seeing results, pressing
+the auto complete key (⇥ by default) will show you any other sub commands
+available.
+
+```
+# Settings
+
+gh >...
+
+# User commands
+
+gh @...
+
+# Your personal commands
+
+gh my...
+
+# Anything else
+
+gh ...
+```
+
+## Resources
+
+- Alfred App:: https://www.alfredapp.com/
+- Original Github Workflow:: https://github.com/gharlan/alfred-github-workflow
+
+## Copyright
+
+MIT License (http://www.opensource.org/licenses/mit-license.html)

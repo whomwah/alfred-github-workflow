@@ -1,6 +1,6 @@
-import Workflow from "./lib/workflow.ts";
-import Action from "./lib/action.ts";
-import { log } from "./helpers/log.ts";
+import Workflow from "./src/workflow.ts";
+import Action from "./src/action.ts";
+import { log } from "./src/helpers/log.ts";
 
 switch (true) {
   case Deno.args[0] === "action": {
