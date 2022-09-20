@@ -142,7 +142,8 @@ describe("When we have a access token", () => {
   });
 
   it("it should fallback to search", async () => {
-    const user = { login: "duncan" } as GhUser;
+    config.token = "abcdefg123444";
+    const user = { login: "whomwah" } as GhUser;
     const userFetch = stub(
       _internals,
       "fetchUser",

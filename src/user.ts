@@ -22,19 +22,12 @@ export default function User(
   };
 
   const users = async () => {
-    const users = await fetchUsers();
+    const users = await _internals.fetchUsers(config);
 
     return Promise.all([
       ...users.map((user) => builder.addItem(mapUserToItem(user))),
     ]);
   };
-
-  const fetchUsers = () => (
-    cacheFetchAll<GhUser>(
-      config,
-      `${config.baseApiUrl}/user/following?per_page=${config.perPage}`,
-    )
-  );
 
   const subItems = () => {
     const cmds = [
@@ -48,7 +41,7 @@ export default function User(
         name: "repositories",
         label: "repositories",
         url: `${config.baseUrl}/${queryArgs.action}?tab=repositories`,
-        icon: "action",
+        icon: "repos",
       },
       {
         name: "stars",
@@ -78,3 +71,12 @@ export default function User(
 
   return commands();
 }
+
+const fetchUsers = (config: Config) => (
+  cacheFetchAll<GhUser>(
+    config,
+    `${config.baseApiUrl}/user/following?per_page=${config.perPage}`,
+  )
+);
+
+export const _internals = { fetchUsers };
