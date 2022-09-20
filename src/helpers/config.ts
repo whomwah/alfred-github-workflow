@@ -15,7 +15,7 @@ export function prefetchConfig(db: DB) {
     baseUrl: "https://github.com",
     baseApiUrl: "https://api.github.com",
     baseGistUrl: "https://gist.github.com",
-    perPage: 50,
+    perPage: 100,
     db,
   };
 
