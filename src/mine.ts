@@ -21,19 +21,12 @@ export default function Mine(
 
   const user = async () => {
     // we expect an array of one
-    const user = await fetchUser();
+    const user = await _internals.fetchUser(config);
 
     return Promise.all([
       ...cmds(user[0]?.login).map((cmd) => builder.addItem(cmd)),
     ]);
   };
-
-  const fetchUser = () => (
-    cacheFetchAll<GhUser>(
-      config,
-      `${config.baseApiUrl}/user?per_page=${config.perPage}`,
-    )
-  );
 
   const cmds = (username: string | null) => {
     if (!username) return [];
@@ -106,3 +99,12 @@ export default function Mine(
 
   return commands();
 }
+
+const fetchUser = (config: Config) => (
+  cacheFetchAll<GhUser>(
+    config,
+    `${config.baseApiUrl}/user?per_page=${config.perPage}`,
+  )
+);
+
+export const _internals = { fetchUser };
