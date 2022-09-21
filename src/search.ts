@@ -23,9 +23,9 @@ export default function Search(
   };
 
   const results = async () => {
-    const repos = await fetchRepos();
-    const users = await fetchUsers();
-    const stars = await fetchStars();
+    const repos = await _internals.fetchRepos(config);
+    const users = await _internals.fetchUsers(config);
+    const stars = await _internals.fetchStars(config);
 
     return Promise.all([
       ...repos.map((repo) => builder.addItem(mapRepoToItem(repo))),
@@ -33,27 +33,6 @@ export default function Search(
       ...stars.map((repo) => builder.addItem(mapRepoToItem(repo))),
     ]);
   };
-
-  const fetchRepos = () => (
-    cacheFetchAll<GhRepo>(
-      config,
-      `${config.baseApiUrl}/user/repos?per_page=${config.perPage}`,
-    )
-  );
-
-  const fetchUsers = () => (
-    cacheFetchAll<GhUser>(
-      config,
-      `${config.baseApiUrl}/user/following?per_page=${config.perPage}`,
-    )
-  );
-
-  const fetchStars = () => (
-    cacheFetchAll<GhRepo>(
-      config,
-      `${config.baseApiUrl}/user/starred?per_page=${config.perPage}`,
-    )
-  );
 
   const subItems = () => {
     const cmds = [
@@ -163,3 +142,26 @@ export default function Search(
 
   return commands();
 }
+
+const fetchRepos = (config: Config) => (
+  cacheFetchAll<GhRepo>(
+    config,
+    `${config.baseApiUrl}/user/repos?per_page=${config.perPage}`,
+  )
+);
+
+const fetchUsers = (config: Config) => (
+  cacheFetchAll<GhUser>(
+    config,
+    `${config.baseApiUrl}/user/following?per_page=${config.perPage}`,
+  )
+);
+
+const fetchStars = (config: Config) => (
+  cacheFetchAll<GhRepo>(
+    config,
+    `${config.baseApiUrl}/user/starred?per_page=${config.perPage}`,
+  )
+);
+
+export const _internals = { fetchRepos, fetchStars, fetchUsers };
