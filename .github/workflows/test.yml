@@ -1,0 +1,38 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        deno:
+          [1.x, "1.8.2", canary, ~1.7, e7b7129b7a92b7500ded88f8f5baa25a7f59e56e]
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1.1.0
+        with:
+          deno-version: v1.x # Run with latest stable Deno.
+
+      # Check if the code is formatted according to Deno's default
+      # formatting conventions.
+      - run: deno fmt --check
+
+      # Scan the code for syntax errors and style issues. If
+      # you want to use a custom linter configuration you can add a configuration file with --config <myconfig>
+      - run: deno lint
+
+      # Run all test files in the repository
+      - run: deno test --allow-env

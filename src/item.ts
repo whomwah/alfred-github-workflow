@@ -6,20 +6,12 @@ export interface Item {
   icon?: Icon;
   valid?: boolean;
   match?: string;
-  autocomplete: string;
+  autocomplete?: string;
   type?: string;
   mods?: Mod;
   action?: string | string[] | Action;
   text?: Text;
   quicklookurl?: string;
-}
-
-export interface ItemMeta {
-  query: string;
-  title: string;
-  subtitle?: string;
-  icon?: string;
-  arg?: string;
 }
 
 interface Text {

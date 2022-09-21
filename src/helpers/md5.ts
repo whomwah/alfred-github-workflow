@@ -1,6 +1,6 @@
-import { crypto } from "../deps.ts";
+import { crypto } from "../../deps.ts";
 
-const createMd5Hash = async (data: string) => {
+export async function createMd5Hash(data: string) {
   const md5Value = new Uint8Array(
     await crypto.subtle.digest("MD5", new TextEncoder().encode(data)),
   );
@@ -11,6 +11,4 @@ const createMd5Hash = async (data: string) => {
     .join("");
 
   return response;
-};
-
-export { createMd5Hash };
+}

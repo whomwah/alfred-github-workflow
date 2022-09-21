@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+VERSION=$(cat VERSION)
+
+echo "updating VERSION to $VERSION in info.plist... ✅"
+/usr/libexec/PlistBuddy -c "Set :version $VERSION" info.plist
+
+echo "confirm releases dir... ✅"
+mkdir -p releases
+
+echo "build releases/alfred-github-workflow.$VERSION.zip... ✅"
+zip -r "releases/alfred-github-workflow.$VERSION.zip" src deps.ts env.ts icon.png icons mod.ts info.plist
+mv "releases/alfred-github-workflow.$VERSION.zip" "releases/github.$VERSION.alfredworkflow"
+
+echo
+echo "New release created! [$VERSION] 🥳"
