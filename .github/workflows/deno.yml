@@ -1,0 +1,29 @@
+name: Deno CI
+
+on:
+  workflow_run:
+    workflows: [Run Tests]
+    types:
+      - completed
+
+jobs:
+  release:
+    if: github.ref_name == 'main'
+    needs: test
+    name: Release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Setup package.json
+        run: echo '{"name":"alfred-github-workflow", "devDependencies":{"semantic-release":"^19.0.5"}}' > package.json
+      - name: Install dependencies
+        run: npm install
+      - name: Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.TEST_GH_TOKEN }}
