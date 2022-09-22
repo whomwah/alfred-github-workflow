@@ -3,6 +3,7 @@
 /// <reference lib="deno.worker" />
 
 import { serve, ServeInit } from "https://deno.land/std@0.155.0/http/server.ts";
+import { oops, thanks } from "./helpers/html.ts";
 
 self.onmessage = async (e: MessageEvent) => {
   const serverOptions: ServeInit = e.data;
@@ -11,24 +12,8 @@ self.onmessage = async (e: MessageEvent) => {
   function handler(req: Request): Response {
     const url = new URL(req.url);
     const params = url.searchParams;
-    const access_token = params.get("access_token");
+    const access_token = params.get("access_token") || "";
     const error = params.get("error");
-    const errorDescription = params.get("error_description");
-    const errorUri = params.get("error_uri");
-    const THANKS = `<body>
-        <h1>Alfred Github Workflow</h1>
-        <h3>Success! Your access token has been saved!</h3>
-        <p>Access token [${access_token}]. You can now close this window and start using the workflow.</p>
-        <p><br />Thanks, Duncan</p>
-      </body>
-    `;
-    const errorMessage = `<body>
-        <h2>Alfred Github Workflow</h2>
-        <h3>${error}: ${errorDescription}</h3>
-        <p><a href="${errorUri}">More information</a></p>
-        <p>DISCLAIMER: I have no interest in your data. The access is purely for the workflow.</p>
-      </body>
-    `;
 
     // Send back the access code
     self.postMessage(access_token);
@@ -39,10 +24,10 @@ self.onmessage = async (e: MessageEvent) => {
     }, 1000);
 
     let resp: Response;
-    if (error) {
-      resp = new Response(errorMessage);
+    if (error || access_token === "") {
+      resp = new Response(oops(params));
     } else {
-      resp = new Response(THANKS);
+      resp = new Response(thanks(access_token));
     }
     resp.headers.set("Content-Type", "text/html");
 
