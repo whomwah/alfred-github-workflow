@@ -9,8 +9,6 @@ on:
 jobs:
   release:
     if: github.ref_name == 'main'
-    needs: test
-    name: Release
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
