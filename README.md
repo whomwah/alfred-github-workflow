@@ -56,6 +56,30 @@ gh ...
 
 ## Development
 
+You will first need to install `deno` as mentioned earlier in this README.
+
+### Tests
+
+`deno test`
+
+### Formatting
+
+`deno fmt`
+
+### Local dev on an installed workflow
+
+You can work locally with your checked out version of the repo and Alfred by
+first installing the latest version of the workflow. You can then set the
+environment variable `LOCAL_SRC` from
+[within the workflow in Alfred](https://www.alfredapp.com/help/workflows/advanced/variables/#environment).
+If you set this `ENV` to a path pointing at your local repo (use `pwd` in your
+repo folder) the workflow will use your local repo instead. Note: This will only
+use your local src code. Any icons are served from the workflow installed. You
+can get to this folder by right clicking on the workflow in Alfred and choosing
+`Open in Finder`.
+
+### Build your own workflow
+
 You can build your own version of the workflow with:
 
 ```
