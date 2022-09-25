@@ -15,7 +15,7 @@ export default async function Action(query: string) {
     // We want to generate a new auth token
     case action("###login###"): {
       await openUrlInBrowser(query.replace("###login###", ""));
-      startServer(db, (message: string) => log(message));
+      await startServer(db, (message: string) => log(message));
       break;
     }
     // We want add our own auth token
