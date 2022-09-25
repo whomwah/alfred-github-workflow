@@ -13,14 +13,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Build release
-        run: ./bin/build_release
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 16
       - name: Setup package.json
-        run: echo '{"name":"alfred-github-workflow", "devDependencies":{"semantic-release":"^19.0.5"}}' > package.json
+        run: echo '{"name":"alfred-github-workflow", "devDependencies":{"@semantic-release/git":"^10.0.1","@semantic-release/exec":"^6.0.3","semantic-release":"^19.0.5"}}' > package.json
       - name: Install dependencies
         run: npm install
       - name: Release

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-VERSION=$(cat VERSION)
+VERSION=$1
 
 echo "updating VERSION to $VERSION in info.plist... ✅"
 /usr/libexec/PlistBuddy -c "Set :version $VERSION" info.plist
