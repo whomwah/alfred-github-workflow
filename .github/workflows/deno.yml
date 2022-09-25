@@ -9,7 +9,7 @@ on:
 jobs:
   release:
     if: github.ref_name == 'main'
-    runs-on: ubuntu-18.04
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
