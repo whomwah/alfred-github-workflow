@@ -2,6 +2,17 @@ import { Octokit } from "../../deps.ts";
 import { updateCache } from "./cache.ts";
 import { Config } from "./config.ts";
 
+interface GithubRoutes {
+  [key: string]: string;
+}
+
+export const GHRoute: GithubRoutes = {
+  "/user": "your profile",
+  "/user/repos": "your repos",
+  "/user/following": "users you follow",
+  "/user/starred": "starred repos",
+};
+
 export interface GhUser {
   id: number;
   login: string;
@@ -21,14 +32,6 @@ export interface GhUser {
   received_events_url: string;
   type: "User";
   site_admin: boolean;
-}
-
-interface GhPermission {
-  admin: boolean;
-  maintain: boolean;
-  push: boolean;
-  triage: boolean;
-  pull: boolean;
 }
 
 export interface GhRepo {
@@ -111,6 +114,14 @@ export interface GhRepo {
   watchers: number;
   default_branch: string;
   permissions: GhPermission;
+}
+
+interface GhPermission {
+  admin: boolean;
+  maintain: boolean;
+  push: boolean;
+  triage: boolean;
+  pull: boolean;
 }
 
 export async function fetchNewDataFromAPIandStore<T>(

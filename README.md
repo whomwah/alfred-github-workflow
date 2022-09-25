@@ -54,6 +54,18 @@ gh my...
 gh ...
 ```
 
+## Development
+
+You can build your own version of the workflow with:
+
+```
+./bin/build_release <version>
+
+# example
+
+./bin/build_release 1.2.3
+```
+
 ## Resources
 
 - Alfred App:: https://www.alfredapp.com/

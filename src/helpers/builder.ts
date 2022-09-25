@@ -13,6 +13,7 @@ export interface BuildItem {
   valid?: boolean;
   autocomplete?: string | boolean;
   skipUID?: boolean;
+  skipMatch?: boolean;
 }
 
 interface Builder {
@@ -52,7 +53,7 @@ export default function Builder(queryArgs: QueryArgs, items: Item[]) {
 
   return {
     addItem: async (item: BuildItem) => {
-      if (matches(item.title, queryArgs.query)) {
+      if (item.skipMatch || matches(item.title, queryArgs.query)) {
         addListItem(await buildListItem(item));
       }
     },
@@ -65,6 +66,7 @@ export function searchGithub(queryArgs: QueryArgs, config: Config) {
     autocomplete: false,
     arg: `${config.baseUrl}/search?q=${queryArgs.query}`,
     skipUID: true,
+    skipMatch: true,
   };
 }
 

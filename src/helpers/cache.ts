@@ -14,6 +14,11 @@ export type DbCache = [
   string | undefined,
 ];
 
+export interface CacheItem {
+  url: string;
+  timestamp: number;
+}
+
 export function cleanCache(db: DB) {
   try {
     db.query("DELETE FROM request_cache WHERE timestamp < :time", {
@@ -24,12 +29,30 @@ export function cleanCache(db: DB) {
   }
 }
 
-export function deleteCache(db: DB) {
+export function deleteCache(db: DB, path?: string) {
+  const query = path
+    ? `DELETE FROM request_cache WHERE LIKE('%${path}?%',url)=1`
+    : "DELETE FROM request_cache";
   try {
-    db.query("DELETE FROM request_cache");
+    db.query(query);
   } catch (err) {
     console.error(err);
   }
+}
+
+export function cacheItems(db: DB) {
+  const items: CacheItem[] = [];
+
+  const query = db.prepareQuery<[CacheItem["url"], CacheItem["timestamp"]]>(
+    "SELECT url, timestamp FROM request_cache WHERE parent IS NULL",
+  );
+
+  for (const [url, timestamp] of query.iter()) {
+    items.push({ url, timestamp });
+  }
+  query.finalize();
+
+  return items;
 }
 
 export function requestFromCache(config: Config, url: string, column: string) {
