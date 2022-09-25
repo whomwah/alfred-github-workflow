@@ -36,6 +36,12 @@ export default async function Action(query: string) {
       log("Logged out successfully!");
       break;
     }
+    // We want to delete the database
+    case action("###database_delete###"): {
+      await deleteDatabase(db);
+      log("Database deleted successfully!");
+      break;
+    }
     // We want to delete the cache
     case action("###cache_delete###"): {
       deleteCache(db);
@@ -43,10 +49,12 @@ export default async function Action(query: string) {
       log("Cache deleted successfully!");
       break;
     }
-    // We want to delete the database
-    case action("###database_delete###"): {
-      await deleteDatabase(db);
-      log("Database deleted successfully!");
+    // We want to clear a specific cache
+    case action("###refresh_cache###"): {
+      const path = query.replace("###refresh_cache###", "");
+      deleteCache(db, path);
+      db.close();
+      log(`Cache for ${path} cleared!`);
       break;
     }
     // Lets assume it's a url

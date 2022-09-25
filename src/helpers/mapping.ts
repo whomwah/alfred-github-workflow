@@ -1,4 +1,7 @@
-import { GhRepo, GhUser } from "./github.ts";
+import { toIMF } from "../../deps.ts";
+import { CacheItem } from "./cache.ts";
+import { GhRepo, GHRoute, GhUser } from "./github.ts";
+import { QueryArgs } from "./query.ts";
 
 export function mapUserToItem(user: GhUser) {
   const prefix = "@";
@@ -19,5 +22,18 @@ export function mapRepoToItem(repo: GhRepo) {
     icon: repo.private ? "private-repo" : "repos",
     autocomplete: `${repo.full_name} `,
     arg: repo.html_url,
+  };
+}
+
+export function mapCacheItemToItem(item: CacheItem, queryArgs: QueryArgs) {
+  const url = new URL(item.url);
+  const label = GHRoute[url.pathname];
+  const date = new Date(item.timestamp);
+
+  return {
+    title: `${queryArgs.prefix} ${queryArgs.action} ${label}`,
+    subtitle: `last checked: ${toIMF(date)}`,
+    arg: `###refresh_cache###${url.pathname}`,
+    icon: "refresh",
   };
 }
