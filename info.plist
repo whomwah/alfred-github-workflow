@@ -74,7 +74,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${LOCAL_SRC}mod.ts action $argv[1]</string>
+				<string>$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${INIT_FILE} action $argv[1]</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -117,7 +117,7 @@
 				<key>runningsubtext</key>
 				<string>Octocat initialising...please wait whilst we prefetch data</string>
 				<key>script</key>
-				<string>$(which deno) run --allow-env --allow-write --allow-read --allow-net ${LOCAL_SRC}mod.ts filter $argv[1]</string>
+				<string>$(which deno) run --allow-env --allow-write --allow-read --allow-net ${INIT_FILE} filter $argv[1]</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -171,6 +171,11 @@ https://github.com/whomwah/alfred-github-workflow</string>
 	</dict>
 	<key>userconfigurationconfig</key>
 	<array/>
+	<key>variables</key>
+	<dict>
+		<key>INIT_FILE</key>
+		<string>mod.min.js</string>
+	</dict>
 	<key>version</key>
 	<string>1.1.2</string>
 	<key>webaddress</key>
