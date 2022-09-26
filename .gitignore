@@ -1,3 +1,4 @@
 releases
 node_modules
 package*.json
+mod.min.js

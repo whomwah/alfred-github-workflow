@@ -69,6 +69,29 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<true/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${INIT_FILE} action $argv[1]</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>5</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -94,7 +117,7 @@
 				<key>runningsubtext</key>
 				<string>Octocat initialising...please wait whilst we prefetch data</string>
 				<key>script</key>
-				<string>$(which deno) run --allow-env --allow-write --allow-read --allow-net mod.ts filter $argv[1]</string>
+				<string>$(which deno) run --allow-env --allow-write --allow-read --allow-net ${INIT_FILE} filter $argv[1]</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -114,29 +137,6 @@
 			<string>D826D6D1-5C1A-45D5-8933-7B0BA272293A</string>
 			<key>version</key>
 			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<true/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read mod.ts action $argv[1]</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>5</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</string>
-			<key>version</key>
-			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -171,6 +171,11 @@ https://github.com/whomwah/alfred-github-workflow</string>
 	</dict>
 	<key>userconfigurationconfig</key>
 	<array/>
+	<key>variables</key>
+	<dict>
+		<key>INIT_FILE</key>
+		<string>mod.min.js</string>
+	</dict>
 	<key>version</key>
 	<string>1.1.2</string>
 	<key>webaddress</key>
