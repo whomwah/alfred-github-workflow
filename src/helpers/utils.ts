@@ -1,10 +1,21 @@
-// Simple Fuzzy string match
-// https://codereview.stackexchange.com/a/23905
-//
-export function fuzzyMatch(str: string, pattern: string) {
-  if (!pattern) return true;
-  pattern = pattern.replace(/ /g, "").split("").reduce((a, b) => a + ".*" + b);
-  return (new RegExp(pattern)).test(str);
+export function fuzzyMatch(haystack: string, needle: string) {
+  if (!haystack) return true;
+
+  const hlen = haystack.length;
+  const nlen = needle.length;
+
+  if (nlen > hlen) return false;
+  if (nlen === hlen) return needle === haystack;
+
+  outer:
+  for (let i = 0, j = 0; i < nlen; i++) {
+    while (j < hlen) {
+      if (haystack.charCodeAt(j++) === needle.charCodeAt(i)) continue outer;
+    }
+    return false;
+  }
+
+  return true;
 }
 
 // Removes dupes from Array of Objs
