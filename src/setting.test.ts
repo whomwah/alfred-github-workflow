@@ -50,28 +50,29 @@ describe("When we have an access token", () => {
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
-    assertEquals(items.length, 4);
+    assertEquals(items.length, 5);
 
     assertEquals(items[0]?.title, "> logout");
-    assertEquals(
-      items[0]?.arg,
-      "###logout###",
-    );
+    assertEquals(items[0]?.arg, "###logout###");
     assertEquals(items[0]?.icon, { path: "./icons/logout.png" });
 
     assertEquals(items[1]?.title, "> delete database");
     assertEquals(items[1]?.arg, "###database_delete###");
     assertEquals(items[1]?.icon, { path: "./icons/delete.png" });
 
-    assertEquals(items[2]?.title, "> clear");
-    assertEquals(items[2]?.icon, { path: "./icons/refresh.png" });
+    assertEquals(items[2]?.title, "> src");
+    assertEquals(items[2]?.icon, { path: "./icons/book.png" });
+    assertEquals(items[2]?.arg, "###workflow_open###");
 
-    assertEquals(items[3]?.title, "> help");
+    assertEquals(items[3]?.title, "> clear");
+    assertEquals(items[3]?.icon, { path: "./icons/refresh.png" });
+
+    assertEquals(items[4]?.title, "> help");
     assertEquals(
-      items[3]?.arg,
+      items[4]?.arg,
       "https://github.com/whomwah/alfred-github-workflow/blob/main/README.md",
     );
-    assertEquals(items[3]?.icon, { path: "./icons/help.png" });
+    assertEquals(items[4]?.icon, { path: "./icons/help.png" });
   });
 
   it("it should all clear settings", async () => {
@@ -95,10 +96,7 @@ describe("When we have an access token", () => {
       assertEquals(items.length, 3);
 
       assertEquals(items[0]?.title, "> clear your repos");
-      assertEquals(
-        items[0]?.arg,
-        "###refresh_cache###/user/repos",
-      );
+      assertEquals(items[0]?.arg, "###refresh_cache###/user/repos");
       assertEquals(items[0]?.icon, { path: "./icons/refresh.png" });
 
       assertEquals(items[1]?.title, "> clear all data");
@@ -141,10 +139,7 @@ describe("When we have an access token", () => {
       assertEquals(items.length, 2);
 
       assertEquals(items[0]?.title, "> clear users you follow");
-      assertEquals(
-        items[0]?.arg,
-        "###refresh_cache###/user/following",
-      );
+      assertEquals(items[0]?.arg, "###refresh_cache###/user/following");
       assertEquals(items[0]?.icon, { path: "./icons/refresh.png" });
 
       assertEquals(items[1]?.title, "> help");

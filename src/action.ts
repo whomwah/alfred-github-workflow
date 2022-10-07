@@ -1,7 +1,7 @@
 import { deleteCache } from "./helpers/cache.ts";
 import { removeConfig, storeConfig } from "./helpers/config.ts";
 import { dbConnect, deleteDatabase } from "./setup.ts";
-import { openUrlInBrowser } from "./helpers/url.ts";
+import { openPath, openUrlInBrowser } from "./helpers/url.ts";
 import { log } from "./helpers/log.ts";
 import { startServer } from "./server.ts";
 
@@ -55,6 +55,11 @@ export default async function Action(query: string) {
       deleteCache(db, path);
       db.close();
       log(`Cache for ${path} cleared!`);
+      break;
+    }
+    // We want to open the workflow src
+    case action("###workflow_open###"): {
+      openPath(new URL("../", import.meta.url).pathname);
       break;
     }
     // Lets assume it's a url

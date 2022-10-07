@@ -9,7 +9,11 @@ function isValidHttpUrl(string: string) {
   return true;
 }
 
+export async function openPath(path: string) {
+  await Deno.run({ cmd: ["open", path] }).status();
+}
+
 export async function openUrlInBrowser(url: string) {
   if (!isValidHttpUrl(url)) return Promise.resolve(true);
-  await Deno.run({ cmd: ["open", url] }).status();
+  await openPath(url);
 }
