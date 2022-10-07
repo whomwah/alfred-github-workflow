@@ -36,7 +36,7 @@ export async function startServer(db: DB, cb: (message: string) => void) {
   // now and if they haven't they can always try again.
   setTimeout(() => {
     cb(
-      "Time out! 30 seconds has passed. Re-run 'gh > login' command to authenticate correctly."
+      "Time out! 30 seconds has passed. Re-run 'gh > login' command to authenticate correctly.",
     );
     Deno.exit();
   }, 30000);

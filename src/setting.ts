@@ -18,9 +18,9 @@ export default function Setting(
   const commands = () => {
     if (!config.token) return loginCommands(queryArgs, builder);
 
-    return Promise.all([
-      isCache ? cacheItems() : results(),
-    ]).then(() => fallback());
+    return Promise.all([isCache ? cacheItems() : results()]).then(() =>
+      fallback()
+    );
   };
 
   const cacheItems = () => {
@@ -65,6 +65,12 @@ export default function Setting(
         subtitle: "Delete all data (contains login, config and cache)",
         arg: "###database_delete###",
         icon: "delete",
+      },
+      {
+        title: `${prefix} src`,
+        subtitle: "Open workflow src folder",
+        arg: "###workflow_open###",
+        icon: "book",
       },
       {
         title: `${prefix} clear`,
