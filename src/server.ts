@@ -1,7 +1,5 @@
-import { DB } from "../deps.ts";
+import { DB, serve, ServeInit } from "../deps.ts";
 import { storeConfig } from "./helpers/config.ts";
-
-import { serve, ServeInit } from "https://deno.land/std@0.155.0/http/server.ts";
 import { oops, thanks } from "./helpers/html.ts";
 
 export async function startServer(db: DB, cb: (message: string) => void) {
@@ -38,7 +36,7 @@ export async function startServer(db: DB, cb: (message: string) => void) {
   // now and if they haven't they can always try again.
   setTimeout(() => {
     cb(
-      "Time out! 30 seconds has passed. Re-run 'gh > login' command to authenticate correctly.",
+      "Time out! 30 seconds has passed. Re-run 'gh > login' command to authenticate correctly."
     );
     Deno.exit();
   }, 30000);
