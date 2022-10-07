@@ -7,6 +7,9 @@ I wanted a real use case to try [Deno](https://deno.land/). It's written in
 [TypeScript](https://www.typescriptlang.org/). It contains as many of the high
 level features in the original.
 
+It runs really fast via the `deno` executable having been bundled into `js` in
+`deno` and minified via [`esbuild`](https://esbuild.github.io/).
+
 ![Github Alfred 5 Workflow](./assets/workflow.gif)
 
 ## Install
