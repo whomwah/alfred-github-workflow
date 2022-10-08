@@ -9,3 +9,4 @@ export {
   serve,
   type ServeInit,
 } from "https://deno.land/std@0.155.0/http/server.ts";
+export { dirname } from "https://deno.land/std@0.159.0/path/mod.ts";

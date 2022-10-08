@@ -4,6 +4,7 @@ import { dbConnect, deleteDatabase } from "./setup.ts";
 import { openPath, openUrlInBrowser } from "./helpers/url.ts";
 import { log } from "./helpers/log.ts";
 import { startServer } from "./server.ts";
+import { dirname } from "../deps.ts";
 
 export default async function Action(query: string) {
   // In this case its up to the function being passed the
@@ -59,7 +60,8 @@ export default async function Action(query: string) {
     }
     // We want to open the workflow src
     case action("###workflow_open###"): {
-      openPath(new URL("../", import.meta.url).pathname);
+      const srcPath = Deno.env.get("INIT_FILE");
+      if (srcPath) openPath(dirname(srcPath));
       break;
     }
     // Lets assume it's a url

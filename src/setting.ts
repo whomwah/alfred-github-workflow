@@ -4,6 +4,7 @@ import { Config } from "./helpers/config.ts";
 import { QueryArgs } from "./helpers/query.ts";
 import { cacheItems } from "./helpers/cache.ts";
 import { mapCacheItemToItem } from "./helpers/mapping.ts";
+import { hasCustomSrcPath } from "./helpers/url.ts";
 
 export default function Setting(
   queryArgs: QueryArgs,
@@ -15,12 +16,17 @@ export default function Setting(
   const prefix = queryArgs.prefix;
   const isCache = queryArgs.action === "clear";
 
-  const commands = () => {
+  const commands = async () => {
     if (!config.token) return loginCommands(queryArgs, builder);
 
-    return Promise.all([isCache ? cacheItems() : results()]).then(() =>
-      fallback()
+    await Promise.all(
+      [
+        isCache ? cacheItems() : results(),
+        hasCustomSrcPath() ? builder.addItem(openSrcItem()) : null,
+      ],
     );
+
+    return fallback();
   };
 
   const cacheItems = () => {
@@ -52,6 +58,13 @@ export default function Setting(
     skipMatch: true,
   });
 
+  const openSrcItem = () => ({
+    title: `${prefix} src`,
+    subtitle: "Open workflow src folder",
+    arg: "###workflow_open###",
+    icon: "book",
+  });
+
   const results = () => {
     const cmds = [
       {
@@ -65,12 +78,6 @@ export default function Setting(
         subtitle: "Delete all data (contains login, config and cache)",
         arg: "###database_delete###",
         icon: "delete",
-      },
-      {
-        title: `${prefix} src`,
-        subtitle: "Open workflow src folder",
-        arg: "###workflow_open###",
-        icon: "book",
       },
       {
         title: `${prefix} clear`,
