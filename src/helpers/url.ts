@@ -17,3 +17,7 @@ export async function openUrlInBrowser(url: string) {
   if (!isValidHttpUrl(url)) return Promise.resolve(true);
   await openPath(url);
 }
+
+export function hasCustomSrcPath() {
+  return Deno.env.get("INIT_FILE") != "mod.min.js";
+}

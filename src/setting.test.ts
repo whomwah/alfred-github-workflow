@@ -60,12 +60,12 @@ describe("When we have an access token", () => {
     assertEquals(items[1]?.arg, "###database_delete###");
     assertEquals(items[1]?.icon, { path: "./icons/delete.png" });
 
-    assertEquals(items[2]?.title, "> src");
-    assertEquals(items[2]?.icon, { path: "./icons/book.png" });
-    assertEquals(items[2]?.arg, "###workflow_open###");
+    assertEquals(items[2]?.title, "> clear");
+    assertEquals(items[2]?.icon, { path: "./icons/refresh.png" });
 
-    assertEquals(items[3]?.title, "> clear");
-    assertEquals(items[3]?.icon, { path: "./icons/refresh.png" });
+    assertEquals(items[3]?.title, "> src");
+    assertEquals(items[3]?.icon, { path: "./icons/book.png" });
+    assertEquals(items[3]?.arg, "###workflow_open###");
 
     assertEquals(items[4]?.title, "> help");
     assertEquals(
@@ -73,6 +73,43 @@ describe("When we have an access token", () => {
       "https://github.com/whomwah/alfred-github-workflow/blob/main/README.md",
     );
     assertEquals(items[4]?.icon, { path: "./icons/help.png" });
+  });
+
+  it("it shouldn't show src if INIT_PATH hasn't changed", async () => {
+    const originalInitFile = Deno.env.get("INIT_FILE");
+    Deno.env.set("INIT_FILE", "mod.min.js");
+
+    config.token = "abcdefg123444";
+    const query = ">";
+    const items: Item[] = [];
+    const args = queryArgs(query, ">");
+    await Setting(args, items, config);
+
+    assertEquals(items.length, 4);
+
+    assertEquals(items[0]?.title, "> logout");
+    assertEquals(items[0]?.arg, "###logout###");
+    assertEquals(items[0]?.icon, { path: "./icons/logout.png" });
+
+    assertEquals(items[1]?.title, "> delete database");
+    assertEquals(items[1]?.arg, "###database_delete###");
+    assertEquals(items[1]?.icon, { path: "./icons/delete.png" });
+
+    assertEquals(items[2]?.title, "> clear");
+    assertEquals(items[2]?.icon, { path: "./icons/refresh.png" });
+
+    assertEquals(items[3]?.title, "> help");
+    assertEquals(
+      items[3]?.arg,
+      "https://github.com/whomwah/alfred-github-workflow/blob/main/README.md",
+    );
+    assertEquals(items[3]?.icon, { path: "./icons/help.png" });
+
+    if (originalInitFile) {
+      Deno.env.set("INIT_FILE", originalInitFile);
+    } else {
+      Deno.env.delete("INIT_FILE");
+    }
   });
 
   it("it should all clear settings", async () => {
