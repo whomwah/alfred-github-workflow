@@ -33,12 +33,6 @@ export default function Mine(
 
     return [
       {
-        title: `${prefix} stars`,
-        subtitle: "View your stars",
-        arg: `${config.baseUrl}/${username}?tab=stars`,
-        icon: "stars",
-      },
-      {
         title: `${prefix} pull requests`,
         subtitle: "View your pull requests",
         arg: `${config.baseUrl}/pulls`,
@@ -81,10 +75,22 @@ export default function Mine(
         icon: "dashboard",
       },
       {
+        title: `${prefix} stars`,
+        subtitle: "View your stars",
+        arg: `${config.baseUrl}/${username}?tab=stars`,
+        icon: "stars",
+      },
+      {
         title: `${prefix} notifications`,
         subtitle: "View your notifications",
         arg: `${config.baseUrl}/notifications`,
         icon: "notifications",
+      },
+      {
+        title: `${prefix} keys`,
+        subtitle: "View and manage your SSH/GPG keys",
+        arg: `${config.baseUrl}/settings/keys`,
+        icon: "security",
       },
       {
         title: `${prefix} settings`,
