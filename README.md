@@ -2,10 +2,9 @@
 
 This workflow is inspired by
 [Alfred workflow](https://github.com/gharlan/alfred-github-workflow) by
-[Gregor Harlan](https://github.com/gharlan). It came about as a side project as
-I wanted a real use case to try [Deno](https://deno.land/). It's written in
-[TypeScript](https://www.typescriptlang.org/). It contains as many of the high
-level features in the original.
+[Gregor Harlan](https://github.com/gharlan). It uses [Deno](https://deno.land/).
+It's written in [TypeScript](https://www.typescriptlang.org/). It contains many
+of the high level features in the original.
 
 It runs really fast via the `deno` executable having been bundled into `js` in
 `deno` and minified via [`esbuild`](https://esbuild.github.io/).
@@ -14,8 +13,9 @@ It runs really fast via the `deno` executable having been bundled into `js` in
 
 ## Install
 
-This workflow requires the [Deno](https://deno.land/) binary to be installed.
-This can be done simply from the [Deno](https://deno.land/) website above.
+The project and workflow requires the [Deno](https://deno.land/) binary to be
+installed. This can be done simply from the [Deno](https://deno.land/) website
+above.
 
 > [Deno](https://deno.land/) is a runtime for JavaScript.
 > [Deno](https://deno.land/) was co-created by Ryan Dahl, who also created
