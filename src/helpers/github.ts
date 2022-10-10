@@ -2,16 +2,12 @@ import { Octokit } from "../../deps.ts";
 import { updateCache } from "./cache.ts";
 import { Config } from "./config.ts";
 
-interface GithubRoutes {
-  [key: string]: string;
+export enum GHRoute {
+  "/user" = "your profile",
+  "/user/repos" = "your repos",
+  "/user/following" = "users you follow",
+  "/user/starred" = "starred repos",
 }
-
-export const GHRoute: GithubRoutes = {
-  "/user": "your profile",
-  "/user/repos": "your repos",
-  "/user/following": "users you follow",
-  "/user/starred": "starred repos",
-};
 
 export interface GhUser {
   id: number;
@@ -130,9 +126,7 @@ export async function fetchNewDataFromAPIandStore<T>(
   results: T[],
   urlToStore?: string,
 ): Promise<void> {
-  console.warn(
-    `fetchNewDataFromAPIandStore: url:${url} urlToStore:${urlToStore}`,
-  );
+  console.warn("fetchNewDataFromAPIandStore:", { url, urlToStore });
   const uri = new URL(url);
   const octokit = new Octokit({ auth: config.token });
   const response = await octokit.request(`GET ${uri.pathname}`, {
@@ -158,6 +152,6 @@ export async function fetchNewDataFromAPIandStore<T>(
       return fetchNewDataFromAPIandStore(config, linkMatch[1], results, url);
     }
   } else {
-    console.warn(response);
+    console.warn("Invalid Github Response:", data);
   }
 }

@@ -112,13 +112,16 @@ async function recursiveDbCacheFetch<T>(
         // clear out old stored credentials
         removeConfig(config.db, "access_token");
 
-        console.error(`${err.name}: ${err.message}`);
+        console.error("recursiveDbCacheFetchError:", {
+          name: err.name,
+          message: err.message,
+        });
       }
     }
   };
 
   if (row) {
-    console.warn(`Cache data found for: ${row.url}`);
+    console.warn("Cache data found for:", row.url);
     const lastChecked = (new Date(row.timestamp)).getTime();
     const data = JSON.parse(row.content);
 
