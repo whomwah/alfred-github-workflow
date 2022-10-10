@@ -27,7 +27,7 @@ export function mapRepoToItem(repo: GhRepo) {
 
 export function mapCacheItemToItem(item: CacheItem, queryArgs: QueryArgs) {
   const url = new URL(item.url);
-  const label = GHRoute[url.pathname];
+  const label = GHRoute[url.pathname as keyof typeof GHRoute];
   const date = new Date(item.timestamp);
 
   return {
