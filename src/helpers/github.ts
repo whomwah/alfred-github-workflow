@@ -1,4 +1,3 @@
-import { Octokit } from "../../deps.ts";
 import { updateCache } from "./cache.ts";
 import { Config } from "./config.ts";
 
@@ -128,13 +127,16 @@ export async function fetchNewDataFromAPIandStore<T>(
 ): Promise<void> {
   console.warn("fetchNewDataFromAPIandStore:", { url, urlToStore });
   const uri = new URL(url);
-  const octokit = new Octokit({ auth: config.token });
-  const response = await octokit.request(`GET ${uri.pathname}`, {
-    per_page: uri.searchParams.get("per_page"),
-    page: uri.searchParams.get("page"),
+  const response = await fetch(uri, {
+    headers: {
+      "Accept": "application/vnd.github.v3+json",
+      "Authorization": `Bearer ${config.token}`,
+    },
   });
-  const data: T | T[] = response.data;
-  const linkMatch: string | null = response.headers.link?.match(
+  const data: T | T[] = await response.json();
+  const linkMatch: RegExpMatchArray | null | undefined = response.headers.get(
+    "Link",
+  )?.match(
     /<([^>]+)>; rel="next"/,
   );
 
