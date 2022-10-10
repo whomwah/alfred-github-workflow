@@ -6,7 +6,7 @@ echo "updating VERSION to $VERSION in info.plist... ✅"
 /usr/libexec/PlistBuddy -c "Set :version $VERSION" info.plist
 
 echo "bundle and minify workflow... ✅"
-deno bundle mod.ts | esbuild --minify > mod.min.js
+deno bundle mod.ts | esbuild --minify-whitespace --minify-identifiers > mod.min.js
 
 echo "confirm releases dir... ✅"
 mkdir -p releases
@@ -14,6 +14,9 @@ mkdir -p releases
 echo "build releases/alfred-github-workflow.$VERSION.zip... ✅"
 zip -r "releases/alfred-github-workflow.$VERSION.zip" icon.png icons mod.min.js info.plist
 mv "releases/alfred-github-workflow.$VERSION.zip" "releases/github.$VERSION.alfredworkflow"
+
+echo "cleanup... ✅"
+rm mod.min.js
 
 echo
 echo "New release created! [$VERSION] 🥳"
