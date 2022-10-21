@@ -9,3 +9,7 @@ export {
   type ServeInit,
 } from "https://deno.land/std@0.155.0/http/server.ts";
 export { dirname } from "https://deno.land/std@0.159.0/path/mod.ts";
+export {
+  lte,
+  valid as validVersion,
+} from "https://deno.land/std@0.160.0/semver/mod.ts";

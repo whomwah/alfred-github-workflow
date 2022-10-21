@@ -5,6 +5,7 @@ import { Config } from "./helpers/config.ts";
 import { Item } from "./item.ts";
 import { cacheFetchAll } from "./helpers/cache.ts";
 import { GhUser } from "./helpers/github.ts";
+import { updateAvailableItem } from "./helpers/updateAvailable.ts";
 
 export default function User(
   queryArgs: QueryArgs,
@@ -13,12 +14,15 @@ export default function User(
 ) {
   const items = listItems;
   const builder = Builder(queryArgs, items);
-  const commands = () => {
+  const commands = async () => {
     if (!config.token) return Promise.resolve();
 
-    return Promise.all([
+    await Promise.all([
+      updateAvailableItem(builder, config),
       queryArgs.isSubCmd ? subItems() : users(),
-    ]).then(() => fallback());
+    ]);
+
+    return await fallback();
   };
 
   const users = async () => {
@@ -57,26 +61,27 @@ export default function User(
       },
     ];
 
-    return Promise.all(cmds.map((key) => {
-      builder.addItem({
-        title: `${queryArgs.prefix}${queryArgs.action} ${key.name}`,
-        subtitle: `View ${queryArgs.action}'s ${key.name}`,
-        arg: key.url,
-        icon: key.icon,
-      });
-    }));
+    return Promise.all(
+      cmds.map((key) => {
+        builder.addItem({
+          title: `${queryArgs.prefix}${queryArgs.action} ${key.name}`,
+          subtitle: `View ${queryArgs.action}'s ${key.name}`,
+          arg: key.url,
+          icon: key.icon,
+        });
+      }),
+    );
   };
 
-  const fallback = () => builder.addItem(searchGithub(queryArgs, config));
+  const fallback = () => searchGithub(builder, queryArgs, config);
 
   return commands();
 }
 
-const fetchUsers = (config: Config) => (
+const fetchUsers = (config: Config) =>
   cacheFetchAll<GhUser>(
     config,
     `${config.baseApiUrl}/user/following?per_page=${config.perPage}`,
-  )
-);
+  );
 
 export const _internals = { fetchUsers };

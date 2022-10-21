@@ -5,7 +5,6 @@ import Mine from "./mine.ts";
 import Search from "./search.ts";
 import { Item } from "./item.ts";
 import { queryArgs } from "./helpers/query.ts";
-import { uniqByKey } from "./helpers/utils.ts";
 
 export default async function Workflow(query: string) {
   const items: Item[] = [];
@@ -13,10 +12,9 @@ export default async function Workflow(query: string) {
 
   await init(db, async (config) => {
     switch (true) {
-      case /^>([a-zA-Z0-9_\s]+)?$/.test(query): {
+      case /^>([a-zA-Z0-9_\s]+)?$/.test(query):
         await Setting(queryArgs(query, ">"), items, config);
         break;
-      }
       case /^@([a-z-]+(\s+))?([a-z-]+)?$/.test(query):
         await User(queryArgs(query, "@"), items, config);
         break;
@@ -29,5 +27,5 @@ export default async function Workflow(query: string) {
   });
   db.close();
 
-  return JSON.stringify({ items: uniqByKey("uid", items) });
+  return JSON.stringify({ items });
 }

@@ -58,6 +58,15 @@ export default async function Action(query: string) {
       log(`Cache for ${path} cleared!`);
       break;
     }
+    // Check for newer versions
+    case action("###workflow_updates###"): {
+      const url = query.replace("###workflow_updates###", "");
+      removeConfig(db, "latestVersion");
+      removeConfig(db, "latestVersionLastChecked");
+      db.close();
+      await openUrlInBrowser(url);
+      break;
+    }
     // We want to open the workflow src
     case action("###workflow_open###"): {
       const srcPath = Deno.env.get("INIT_FILE");

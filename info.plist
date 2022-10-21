@@ -170,7 +170,27 @@ https://github.com/whomwah/alfred-github-workflow</string>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
-	<array/>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<true/>
+				<key>required</key>
+				<false/>
+				<key>text</key>
+				<string></string>
+			</dict>
+			<key>description</key>
+			<string>Show when updates are available</string>
+			<key>label</key>
+			<string>Check for updates</string>
+			<key>type</key>
+			<string>checkbox</string>
+			<key>variable</key>
+			<string>checkForUpdates</string>
+		</dict>
+	</array>
 	<key>variables</key>
 	<dict>
 		<key>INIT_FILE</key>

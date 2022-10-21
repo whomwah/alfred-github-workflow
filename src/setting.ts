@@ -1,10 +1,11 @@
-import Builder, { loginCommands } from "./helpers/builder.ts";
+import Builder, { BuildItem, loginCommands } from "./helpers/builder.ts";
 import { Item } from "./item.ts";
 import { Config } from "./helpers/config.ts";
 import { QueryArgs } from "./helpers/query.ts";
 import { cacheItems } from "./helpers/cache.ts";
 import { mapCacheItemToItem } from "./helpers/mapping.ts";
 import { hasCustomSrcPath } from "./helpers/url.ts";
+import { updateAvailableItem } from "./helpers/updateAvailable.ts";
 
 export default function Setting(
   queryArgs: QueryArgs,
@@ -19,12 +20,11 @@ export default function Setting(
   const commands = async () => {
     if (!config.token) return loginCommands(queryArgs, builder);
 
-    await Promise.all(
-      [
-        isCache ? cacheItems() : results(),
-        hasCustomSrcPath() ? builder.addItem(openSrcItem()) : null,
-      ],
-    );
+    await Promise.all([
+      updateAvailableItem(builder, config),
+      isCache ? cacheItems() : results(),
+      hasCustomSrcPath() ? builder.addItem(openSrcItem()) : null,
+    ]);
 
     return fallback();
   };
@@ -34,7 +34,7 @@ export default function Setting(
 
     const cmd = {
       title: `${prefix} ${queryArgs.action} all data`,
-      subtitle: "Deletes cache (forces fresh data to be fetched)",
+      subtitle: "Deletes the whole cache (forces fresh data to be fetched)",
       arg: "###cache_delete###",
       icon: "delete",
     };
@@ -49,7 +49,7 @@ export default function Setting(
 
   const fallback = () => builder.addItem(helpItem());
 
-  const helpItem = () => ({
+  const helpItem = (): BuildItem => ({
     title: `${prefix} help`,
     subtitle: "View the README",
     arg: `${config.baseUrl}/whomwah/alfred-github-workflow/blob/main/README.md`,
@@ -75,15 +75,22 @@ export default function Setting(
       },
       {
         title: `${prefix} delete database`,
-        subtitle: "Delete all data (contains login, config and cache)",
+        subtitle: "Delete ALL data (includes login, config and cache)",
         arg: "###database_delete###",
         icon: "delete",
       },
       {
         title: `${prefix} clear`,
         subtitle: "Clear local cache data",
-        icon: "refresh",
+        icon: "delete",
         valid: false,
+      },
+      {
+        title: `${prefix} check`,
+        subtitle: "Check for newer available versions of the workflow",
+        arg:
+          `###workflow_updates###${config.baseUrl}/whomwah/alfred-github-workflow/releases`,
+        icon: "refresh",
       },
     ];
 

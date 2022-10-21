@@ -16,7 +16,7 @@ export interface BuildItem {
   skipMatch?: boolean;
 }
 
-interface Builder {
+export interface BuilderType {
   addItem: (item: BuildItem) => Promise<void>;
 }
 
@@ -47,9 +47,7 @@ export default function Builder(queryArgs: QueryArgs, items: Item[]) {
     return payload;
   };
 
-  const addListItem = (item: Item) => {
-    items.push(item);
-  };
+  const addListItem = (item: Item) => items.push(item);
 
   return {
     addItem: async (item: BuildItem) => {
@@ -60,28 +58,33 @@ export default function Builder(queryArgs: QueryArgs, items: Item[]) {
   };
 }
 
-export function searchGithub(queryArgs: QueryArgs, config: Config) {
-  return {
+export function searchGithub(
+  builder: BuilderType,
+  queryArgs: QueryArgs,
+  config: Config,
+) {
+  const item: BuildItem = {
     title: `Search Github for '${queryArgs.query}'`,
     autocomplete: false,
     arg: `${config.baseUrl}/search?q=${queryArgs.query}`,
     skipUID: true,
     skipMatch: true,
   };
+
+  return builder.addItem(item);
 }
 
-export function loginCommands(queryArgs: QueryArgs, builder: Builder) {
+export function loginCommands(queryArgs: QueryArgs, builder: BuilderType) {
   // has the user provided a token in query?
   const providedToken = extractLoginToken(queryArgs.parts);
-  const loginGenerateTokenCmd = () => (
+  const loginGenerateTokenCmd = () =>
     builder.addItem({
       title: `> login`,
       subtitle: "Generate OAuth access token",
       icon: "login",
       arg: `###login###${OAUTH_URL}`,
-    })
-  );
-  const loginSaveTokenCmd = (token: string, valid: boolean) => (
+    });
+  const loginSaveTokenCmd = (token: string, valid: boolean) =>
     builder.addItem({
       title: `> login ${token}`,
       subtitle: "Save access token",
@@ -89,15 +92,16 @@ export function loginCommands(queryArgs: QueryArgs, builder: Builder) {
       autocomplete: `> login `,
       arg: `###login_with_token###${token}`,
       valid,
-    })
-  );
+    });
 
-  return Promise.all([
-    providedToken ? null : loginGenerateTokenCmd(),
-    providedToken
-      ? loginSaveTokenCmd(providedToken, true)
-      : loginSaveTokenCmd("<access_token>", false),
-  ].filter((v) => v !== null));
+  return Promise.all(
+    [
+      providedToken ? null : loginGenerateTokenCmd(),
+      providedToken
+        ? loginSaveTokenCmd(providedToken, true)
+        : loginSaveTokenCmd("<access_token>", false),
+    ].filter((v) => v !== null),
+  );
 }
 
 function extractLoginToken(parts: string[]) {

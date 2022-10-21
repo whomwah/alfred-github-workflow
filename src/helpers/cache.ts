@@ -7,12 +7,7 @@ const INVALIDATE_CACHE_DATE = new Date().getTime() - 1000 * 60 * 60 * 24 * 14; /
 /**
  * [:url, :timestamp, :content, :parent]
  */
-export type DbCache = [
-  string,
-  number,
-  string,
-  string | undefined,
-];
+export type DbCache = [string, number, string, string | undefined];
 
 export interface CacheItem {
   url: string;
@@ -65,7 +60,9 @@ export function requestFromCache(config: Config, url: string, column: string) {
       timestamp: number;
     },
     { url: string }
-  >(`SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`);
+  >(
+    `SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`,
+  );
   const row = stmt.firstEntry({ url });
   stmt.finalize();
 
@@ -85,15 +82,6 @@ export function updateCache(db: DB, data: DbCache) {
 
 export function cacheFetchAll<T>(config: Config, url: string): Promise<T[]> {
   return recursiveDbCacheFetch<T>(url, [], config, true);
-}
-
-export function cacheFetchFirst<T>(config: Config, url: string): T {
-  const sql = "SELECT content FROM request_cache WHERE url = :url";
-  const stmt = config.db.prepareQuery<[string]>(sql);
-  const row = stmt.first({ url });
-  stmt.finalize();
-
-  return row ? JSON.parse(row[0]) : {};
 }
 
 async function recursiveDbCacheFetch<T>(
@@ -122,11 +110,11 @@ async function recursiveDbCacheFetch<T>(
 
   if (row) {
     console.warn("Cache data found for:", row.url);
-    const lastChecked = (new Date(row.timestamp)).getTime();
+    const lastChecked = new Date(row.timestamp).getTime();
     const data = JSON.parse(row.content);
 
     // This is the initial request and the data looks stale
-    if (initialPage && (lastChecked < INVALIDATE_CACHE_DATE)) {
+    if (initialPage && lastChecked < INVALIDATE_CACHE_DATE) {
       console.warn("We should fetch some new data! as this is OLD");
 
       // clear any stale data

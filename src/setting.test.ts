@@ -11,13 +11,13 @@ import { queryArgs } from "./helpers/query.ts";
 import { Item } from "./item.ts";
 import Setting, { _internals } from "./setting.ts";
 
-const config: Config = {
+const config = {
   baseUrl: "https://github.com",
   baseApiUrl: "https://api.github.com",
   baseGistUrl: "https://gist.github.com",
   perPage: 50,
   db: "" as unknown as DB,
-};
+} as Config;
 
 describe("When we have no access token", () => {
   it("it should show login options", async () => {
@@ -50,7 +50,7 @@ describe("When we have an access token", () => {
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
-    assertEquals(items.length, 5);
+    assertEquals(items.length, 6);
 
     assertEquals(items[0]?.title, "> logout");
     assertEquals(items[0]?.arg, "###logout###");
@@ -61,18 +61,25 @@ describe("When we have an access token", () => {
     assertEquals(items[1]?.icon, { path: "./icons/delete.png" });
 
     assertEquals(items[2]?.title, "> clear");
-    assertEquals(items[2]?.icon, { path: "./icons/refresh.png" });
+    assertEquals(items[2]?.icon, { path: "./icons/delete.png" });
 
-    assertEquals(items[3]?.title, "> src");
-    assertEquals(items[3]?.icon, { path: "./icons/book.png" });
-    assertEquals(items[3]?.arg, "###workflow_open###");
-
-    assertEquals(items[4]?.title, "> help");
+    assertEquals(items[3]?.title, "> check");
+    assertEquals(items[3]?.icon, { path: "./icons/refresh.png" });
     assertEquals(
-      items[4]?.arg,
+      items[3]?.arg,
+      "###workflow_updates###https://github.com/whomwah/alfred-github-workflow/releases",
+    );
+
+    assertEquals(items[4]?.title, "> src");
+    assertEquals(items[4]?.icon, { path: "./icons/book.png" });
+    assertEquals(items[4]?.arg, "###workflow_open###");
+
+    assertEquals(items[5]?.title, "> help");
+    assertEquals(
+      items[5]?.arg,
       "https://github.com/whomwah/alfred-github-workflow/blob/main/README.md",
     );
-    assertEquals(items[4]?.icon, { path: "./icons/help.png" });
+    assertEquals(items[5]?.icon, { path: "./icons/help.png" });
   });
 
   it("it shouldn't show src if INIT_PATH hasn't changed", async () => {
@@ -85,7 +92,7 @@ describe("When we have an access token", () => {
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
-    assertEquals(items.length, 4);
+    assertEquals(items.length, 5);
 
     assertEquals(items[0]?.title, "> logout");
     assertEquals(items[0]?.arg, "###logout###");
@@ -96,14 +103,21 @@ describe("When we have an access token", () => {
     assertEquals(items[1]?.icon, { path: "./icons/delete.png" });
 
     assertEquals(items[2]?.title, "> clear");
-    assertEquals(items[2]?.icon, { path: "./icons/refresh.png" });
+    assertEquals(items[2]?.icon, { path: "./icons/delete.png" });
 
-    assertEquals(items[3]?.title, "> help");
+    assertEquals(items[3]?.title, "> check");
+    assertEquals(items[3]?.icon, { path: "./icons/refresh.png" });
     assertEquals(
       items[3]?.arg,
+      "###workflow_updates###https://github.com/whomwah/alfred-github-workflow/releases",
+    );
+
+    assertEquals(items[4]?.title, "> help");
+    assertEquals(
+      items[4]?.arg,
       "https://github.com/whomwah/alfred-github-workflow/blob/main/README.md",
     );
-    assertEquals(items[3]?.icon, { path: "./icons/help.png" });
+    assertEquals(items[4]?.icon, { path: "./icons/help.png" });
 
     if (originalInitFile) {
       Deno.env.set("INIT_FILE", originalInitFile);

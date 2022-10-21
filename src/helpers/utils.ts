@@ -17,14 +17,3 @@ export function fuzzyMatch(haystack: string, needle: string) {
 
   return true;
 }
-
-// Removes dupes from Array of Objs
-export function uniqByKey<T>(key: string, arr: T[]) {
-  const uniqueValuesSet = new Set();
-
-  return arr.filter((obj) => {
-    const isPresentInSet = uniqueValuesSet.has(obj[key as keyof T]);
-    uniqueValuesSet.add(obj[key as keyof T]);
-    return !isPresentInSet;
-  });
-}
