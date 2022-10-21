@@ -11,13 +11,13 @@ import { queryArgs } from "./helpers/query.ts";
 import { Item } from "./item.ts";
 import Search, { _internals } from "./search.ts";
 
-const config: Config = {
+const config = {
   baseUrl: "https://github.com",
   baseApiUrl: "https://api.github.com",
   baseGistUrl: "https://gist.github.com",
   perPage: 50,
   db: "" as unknown as DB,
-};
+} as Config;
 
 describe("When we have an empty access token", () => {
   it("it should show login options", async () => {
@@ -36,10 +36,7 @@ describe("When we have an empty access token", () => {
     assertEquals(items[0].icon, { path: "./icons/login.png" });
 
     assertEquals(items[1].title, "> login <access_token>");
-    assertEquals(
-      items[1].arg,
-      "###login_with_token###<access_token>",
-    );
+    assertEquals(items[1].arg, "###login_with_token###<access_token>");
     assertEquals(items[1].icon, { path: "./icons/login.png" });
   });
 
@@ -52,10 +49,7 @@ describe("When we have an empty access token", () => {
     assertEquals(items.length, 1);
 
     assertEquals(items[0].title, "> login abc123");
-    assertEquals(
-      items[0].arg,
-      "###login_with_token###abc123",
-    );
+    assertEquals(items[0].arg, "###login_with_token###abc123");
     assertEquals(items[0].icon, { path: "./icons/login.png" });
   });
 });
@@ -80,21 +74,9 @@ describe("When we have a access token", () => {
       html_url: "http://rqrcode-core.com",
     } as GhRepo;
 
-    const userFetch = stub(
-      _internals,
-      "fetchUsers",
-      resolvesNext([[user]]),
-    );
-    const repoFetch = stub(
-      _internals,
-      "fetchRepos",
-      resolvesNext([[repo]]),
-    );
-    const starFetch = stub(
-      _internals,
-      "fetchStars",
-      resolvesNext([[star]]),
-    );
+    const userFetch = stub(_internals, "fetchUsers", resolvesNext([[user]]));
+    const repoFetch = stub(_internals, "fetchRepos", resolvesNext([[repo]]));
+    const starFetch = stub(_internals, "fetchStars", resolvesNext([[star]]));
 
     try {
       const query = "rqre";
@@ -115,10 +97,7 @@ describe("When we have a access token", () => {
       assertEquals(items[1].icon, { path: "./icons/private-repo.png" });
 
       assertEquals(items[2].title, "Search Github for 'rqre'");
-      assertEquals(
-        items[2].arg,
-        "https://github.com/search?q=rqre",
-      );
+      assertEquals(items[2].arg, "https://github.com/search?q=rqre");
       assertEquals(items[2].icon, { path: "./icon.png" });
       assertEquals(items[2].valid, true);
     } finally {
@@ -147,21 +126,9 @@ describe("When we have a access token", () => {
       html_url: "http://rqrcode-core.com",
     } as GhRepo;
 
-    const userFetch = stub(
-      _internals,
-      "fetchUsers",
-      resolvesNext([[user]]),
-    );
-    const repoFetch = stub(
-      _internals,
-      "fetchRepos",
-      resolvesNext([[repo]]),
-    );
-    const starFetch = stub(
-      _internals,
-      "fetchStars",
-      resolvesNext([[star]]),
-    );
+    const userFetch = stub(_internals, "fetchUsers", resolvesNext([[user]]));
+    const repoFetch = stub(_internals, "fetchRepos", resolvesNext([[repo]]));
+    const starFetch = stub(_internals, "fetchStars", resolvesNext([[star]]));
 
     try {
       const query = "";
@@ -186,10 +153,7 @@ describe("When we have a access token", () => {
       assertEquals(items[2].icon, { path: "./icons/private-repo.png" });
 
       assertEquals(items[3].title, "Search Github for ''");
-      assertEquals(
-        items[3].arg,
-        "https://github.com/search?q=",
-      );
+      assertEquals(items[3].arg, "https://github.com/search?q=");
       assertEquals(items[3].icon, { path: "./icon.png" });
       assertEquals(items[3].valid, true);
     } finally {
@@ -218,21 +182,9 @@ describe("When we have a access token", () => {
       html_url: "http://rqrcode-core.com",
     } as GhRepo;
 
-    const userFetch = stub(
-      _internals,
-      "fetchUsers",
-      resolvesNext([[user]]),
-    );
-    const repoFetch = stub(
-      _internals,
-      "fetchRepos",
-      resolvesNext([[repo]]),
-    );
-    const starFetch = stub(
-      _internals,
-      "fetchStars",
-      resolvesNext([[star]]),
-    );
+    const userFetch = stub(_internals, "fetchUsers", resolvesNext([[user]]));
+    const repoFetch = stub(_internals, "fetchRepos", resolvesNext([[repo]]));
+    const starFetch = stub(_internals, "fetchStars", resolvesNext([[star]]));
 
     try {
       const query = "xxxxxxxxxxxxxx";
@@ -241,14 +193,8 @@ describe("When we have a access token", () => {
       await Search(args, items, config);
 
       assertEquals(items.length, 1);
-      assertEquals(
-        items[0].title,
-        "Search Github for 'xxxxxxxxxxxxxx'",
-      );
-      assertEquals(
-        items[0].arg,
-        "https://github.com/search?q=xxxxxxxxxxxxxx",
-      );
+      assertEquals(items[0].title, "Search Github for 'xxxxxxxxxxxxxx'");
+      assertEquals(items[0].arg, "https://github.com/search?q=xxxxxxxxxxxxxx");
       assertEquals(items[0].icon, { path: "./icon.png" });
       assertEquals(items[0].valid, true);
     } finally {

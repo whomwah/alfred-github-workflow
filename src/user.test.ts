@@ -11,13 +11,13 @@ import { queryArgs } from "./helpers/query.ts";
 import { Item } from "./item.ts";
 import User, { _internals } from "./user.ts";
 
-const config: Config = {
+const config = {
   baseUrl: "https://github.com",
   baseApiUrl: "https://api.github.com",
   baseGistUrl: "https://gist.github.com",
   perPage: 50,
   db: "" as unknown as DB,
-};
+} as Config;
 
 describe("When we have an empty token", () => {
   it("it should show nothing", async () => {
@@ -60,10 +60,7 @@ describe("When we have a access token", () => {
       assertEquals(items[0].icon, { path: "./icons/user.png" });
 
       assertEquals(items[1].title, "Search Github for '@whomwah'");
-      assertEquals(
-        items[1].arg,
-        "https://github.com/search?q=@whomwah",
-      );
+      assertEquals(items[1].arg, "https://github.com/search?q=@whomwah");
       assertEquals(items[1].icon, { path: "./icon.png" });
       assertEquals(items[1].valid, true);
     } finally {
@@ -104,10 +101,7 @@ describe("When we have a access token", () => {
       assertEquals(items[1].icon, { path: "./icons/user.png" });
 
       assertEquals(items[2].title, "Search Github for '@'");
-      assertEquals(
-        items[2].arg,
-        "https://github.com/search?q=@",
-      );
+      assertEquals(items[2].arg, "https://github.com/search?q=@");
       assertEquals(items[2].icon, { path: "./icon.png" });
       assertEquals(items[2].valid, true);
     } finally {
@@ -121,11 +115,7 @@ describe("When we have a access token", () => {
       login: "whomwah",
       html_url: "http://foo.com",
     } as GhUser;
-    const userFetch = stub(
-      _internals,
-      "fetchUsers",
-      resolvesNext([[user]]),
-    );
+    const userFetch = stub(_internals, "fetchUsers", resolvesNext([[user]]));
 
     try {
       const query = "@whomwah ";
@@ -169,11 +159,7 @@ describe("When we have a access token", () => {
       login: "whomwah",
       html_url: "http://foo.com",
     } as GhUser;
-    const userFetch = stub(
-      _internals,
-      "fetchUsers",
-      resolvesNext([[user]]),
-    );
+    const userFetch = stub(_internals, "fetchUsers", resolvesNext([[user]]));
 
     try {
       const query = "@xxxxxxxxxxx";
@@ -182,14 +168,8 @@ describe("When we have a access token", () => {
       await User(args, items, config);
 
       assertEquals(items.length, 1);
-      assertEquals(
-        items[0].title,
-        "Search Github for '@xxxxxxxxxxx'",
-      );
-      assertEquals(
-        items[0].arg,
-        "https://github.com/search?q=@xxxxxxxxxxx",
-      );
+      assertEquals(items[0].title, "Search Github for '@xxxxxxxxxxx'");
+      assertEquals(items[0].arg, "https://github.com/search?q=@xxxxxxxxxxx");
       assertEquals(items[0].icon, { path: "./icon.png" });
       assertEquals(items[0].valid, true);
     } finally {

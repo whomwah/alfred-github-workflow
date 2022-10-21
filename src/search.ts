@@ -5,6 +5,7 @@ import { Config } from "./helpers/config.ts";
 import { cacheFetchAll } from "./helpers/cache.ts";
 import { Item } from "./item.ts";
 import { GhRepo, GhUser } from "./helpers/github.ts";
+import { updateAvailableItem } from "./helpers/updateAvailable.ts";
 
 export default function Search(
   queryArgs: QueryArgs,
@@ -14,12 +15,15 @@ export default function Search(
   const items = listItems;
   const builder = Builder(queryArgs, items);
   const repoName = queryArgs.action;
-  const commands = () => {
+  const commands = async () => {
     if (!config.token) return loginCommands(queryArgs, builder);
 
-    return Promise.all([
+    await Promise.all([
+      updateAvailableItem(builder, config),
       queryArgs.isSubCmd ? subItems() : results(),
-    ]).then(() => fallback());
+    ]);
+
+    return await fallback();
   };
 
   const results = async () => {
@@ -128,40 +132,45 @@ export default function Search(
       },
     ];
 
-    return Promise.all(cmds.map((key) => {
-      builder.addItem({
-        title: key.title,
-        subtitle: key.subtitle,
-        arg: key.arg,
-        icon: key.icon,
-      });
-    }));
+    return Promise.all(
+      cmds.map((key) => {
+        builder.addItem({
+          title: key.title,
+          subtitle: key.subtitle,
+          arg: key.arg,
+          icon: key.icon,
+        });
+      }),
+    );
   };
 
-  const fallback = () => builder.addItem(searchGithub(queryArgs, config));
+  const fallback = () => searchGithub(builder, queryArgs, config);
 
   return commands();
 }
 
-const fetchRepos = (config: Config) => (
+const fetchRepos = (config: Config) =>
   cacheFetchAll<GhRepo>(
     config,
     `${config.baseApiUrl}/user/repos?per_page=${config.perPage}`,
-  )
-);
+  );
 
-const fetchUsers = (config: Config) => (
+const fetchUsers = (config: Config) =>
   cacheFetchAll<GhUser>(
     config,
     `${config.baseApiUrl}/user/following?per_page=${config.perPage}`,
-  )
-);
+  );
 
-const fetchStars = (config: Config) => (
+const fetchStars = (config: Config) =>
   cacheFetchAll<GhRepo>(
     config,
     `${config.baseApiUrl}/user/starred?per_page=${config.perPage}`,
-  )
-);
+  );
 
-export const _internals = { fetchRepos, fetchStars, fetchUsers };
+const fetchReleases = (config: Config) =>
+  cacheFetchAll<GhRepo>(
+    config,
+    `${config.baseApiUrl}/releases?per_page=${config.perPage}`,
+  );
+
+export const _internals = { fetchRepos, fetchStars, fetchUsers, fetchReleases };

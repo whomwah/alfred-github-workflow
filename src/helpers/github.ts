@@ -29,6 +29,10 @@ export interface GhUser {
   site_admin: boolean;
 }
 
+export interface GhRelease {
+  tag_name: string;
+}
+
 export interface GhRepo {
   id: number;
   node_id: string;
@@ -119,6 +123,17 @@ interface GhPermission {
   pull: boolean;
 }
 
+export function fetchData(url: string, token?: string) {
+  const uri = new URL(url);
+
+  return fetch(uri, {
+    headers: {
+      Accept: "application/vnd.github.v3+json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
 export async function fetchNewDataFromAPIandStore<T>(
   config: Config,
   url: string,
@@ -126,19 +141,11 @@ export async function fetchNewDataFromAPIandStore<T>(
   urlToStore?: string,
 ): Promise<void> {
   console.warn("fetchNewDataFromAPIandStore:", { url, urlToStore });
-  const uri = new URL(url);
-  const response = await fetch(uri, {
-    headers: {
-      "Accept": "application/vnd.github.v3+json",
-      "Authorization": `Bearer ${config.token}`,
-    },
-  });
+  const response = await fetchData(url, config.token);
   const data: T | T[] = await response.json();
-  const linkMatch: RegExpMatchArray | null | undefined = response.headers.get(
-    "Link",
-  )?.match(
-    /<([^>]+)>; rel="next"/,
-  );
+  const linkMatch: RegExpMatchArray | null | undefined = response.headers
+    .get("Link")
+    ?.match(/<([^>]+)>; rel="next"/);
 
   if ([200, 304].includes(response.status)) {
     updateCache(config.db, [

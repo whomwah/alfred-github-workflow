@@ -4,6 +4,7 @@ import { Config } from "./helpers/config.ts";
 import { cacheFetchAll } from "./helpers/cache.ts";
 import Builder, { searchGithub } from "./helpers/builder.ts";
 import { GhUser } from "./helpers/github.ts";
+import { updateAvailableItem } from "./helpers/updateAvailable.ts";
 
 export default function Mine(
   queryArgs: QueryArgs,
@@ -13,10 +14,11 @@ export default function Mine(
   const items = listItems;
   const builder = Builder(queryArgs, items);
   const prefix = queryArgs.prefix;
-  const commands = () => {
+  const commands = async () => {
     if (!config.token) return Promise.resolve();
+    await Promise.all([updateAvailableItem(builder, config), user()]);
 
-    return user().then(() => fallback());
+    return await fallback();
   };
 
   const user = async () => {
@@ -101,16 +103,15 @@ export default function Mine(
     ];
   };
 
-  const fallback = () => builder.addItem(searchGithub(queryArgs, config));
+  const fallback = () => searchGithub(builder, queryArgs, config);
 
   return commands();
 }
 
-const fetchUser = (config: Config) => (
+const fetchUser = (config: Config) =>
   cacheFetchAll<GhUser>(
     config,
     `${config.baseApiUrl}/user?per_page=${config.perPage}`,
-  )
-);
+  );
 
 export const _internals = { fetchUser };

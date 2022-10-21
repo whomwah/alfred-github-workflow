@@ -11,13 +11,13 @@ import { queryArgs } from "./helpers/query.ts";
 import { Item } from "./item.ts";
 import Mine, { _internals } from "./mine.ts";
 
-const config: Config = {
+const config = {
   baseUrl: "https://github.com",
   baseApiUrl: "https://api.github.com",
   baseGistUrl: "https://gist.github.com",
   perPage: 50,
   db: "" as unknown as DB,
-};
+} as Config;
 
 describe("When we have an empty token", () => {
   it("it should show nothing", async () => {
@@ -34,11 +34,7 @@ describe("When we have a access token", () => {
   it("it should show options that user", async () => {
     config.token = "abcdefg123444";
     const user = { login: "whomwah" } as GhUser;
-    const userFetch = stub(
-      _internals,
-      "fetchUser",
-      resolvesNext([[user]]),
-    );
+    const userFetch = stub(_internals, "fetchUser", resolvesNext([[user]]));
 
     try {
       const query = "my";
@@ -115,11 +111,7 @@ describe("When we have a access token", () => {
   it("it should show partial results", async () => {
     config.token = "abcdefg123444";
     const user = { login: "whomwah" } as GhUser;
-    const userFetch = stub(
-      _internals,
-      "fetchUser",
-      resolvesNext([[user]]),
-    );
+    const userFetch = stub(_internals, "fetchUser", resolvesNext([[user]]));
 
     try {
       const query = "my notifications";
@@ -149,11 +141,7 @@ describe("When we have a access token", () => {
   it("it should fallback to search", async () => {
     config.token = "abcdefg123444";
     const user = { login: "whomwah" } as GhUser;
-    const userFetch = stub(
-      _internals,
-      "fetchUser",
-      resolvesNext([[user]]),
-    );
+    const userFetch = stub(_internals, "fetchUser", resolvesNext([[user]]));
 
     try {
       const query = "my zzzzzzzzzzzzzzzzzzzzz";
