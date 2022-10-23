@@ -62,13 +62,12 @@ describe("#updateAvailableItem", () => {
         checkForUpdates: true,
         latestVersion: "2.0.0",
         currentVersion: "1.0.0",
-        baseUrl: "githubUrl",
       } as Config;
       const update = await updateAvailableItem(builder, config);
       assertSpyCall(buildStub, 0, {
         args: [
           {
-            arg: "githubUrl/whomwah/alfred-github-workflow/releases/v2.0.0",
+            arg: "###update_available###",
             icon: "folder",
             skipMatch: true,
             skipUID: true,
@@ -84,7 +83,7 @@ describe("#updateAvailableItem", () => {
     }
   });
 
-  it("it does check 7 days minus 1 second ago", async () => {
+  it("it does check weekly minus 1 second ago", async () => {
     const fetchAndStore = stub(_internals, "fetchAndStore");
     const builder = { addItem: () => Promise.resolve() };
     const timeEpoch = 1666000000000;
@@ -110,7 +109,7 @@ describe("#updateAvailableItem", () => {
     }
   });
 
-  it("it doesn't check 7 days plus 1 second ago", async () => {
+  it("it doesn't check weekly plus 1 second ago", async () => {
     const builder = { addItem: () => Promise.resolve() };
     const timeEpoch = 1666000000000;
     const time = new FakeTime(timeEpoch);
@@ -128,6 +127,36 @@ describe("#updateAvailableItem", () => {
       assertEquals(update, undefined);
     } finally {
       time.restore();
+    }
+  });
+
+  it("it does check daily if set in preferences plus 1 second", async () => {
+    const originalInitFile = Deno.env.get("updateFrequency");
+    Deno.env.set("updateFrequency", "daily");
+
+    const builder = { addItem: () => Promise.resolve() };
+    const timeEpoch = 1666000000000;
+    const time = new FakeTime(timeEpoch);
+    // 1 day and 1 second ago
+    const lastChecked = timeEpoch - 1000 * 60 * 60 * 24 * 1 + 1;
+
+    try {
+      const config = {
+        checkForUpdates: true,
+        latestVersion: "2.0.0",
+        currentVersion: "1.0.0",
+        latestVersionLastChecked: lastChecked,
+      } as Config;
+      const update = await updateAvailableItem(builder, config);
+      assertEquals(update, undefined);
+    } finally {
+      time.restore();
+    }
+
+    if (originalInitFile) {
+      Deno.env.set("updateFrequency", originalInitFile);
+    } else {
+      Deno.env.delete("updateFrequency");
     }
   });
 });

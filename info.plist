@@ -8,11 +8,51 @@
 	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
-		<key>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</key>
+		<key>16772598-5A71-4CC9-A6D7-ECAAC9299234</key>
+		<array/>
+		<key>30C17AB4-36EF-4398-ADDF-B795D814F5F7</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>16772598-5A71-4CC9-A6D7-ECAAC9299234</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>4717FF19-F3EA-437A-9420-23401B9E626B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>30C17AB4-36EF-4398-ADDF-B795D814F5F7</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>D506270D-11C9-4E47-B23F-BF7184B034EF</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>16772598-5A71-4CC9-A6D7-ECAAC9299234</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4717FF19-F3EA-437A-9420-23401B9E626B</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -48,33 +88,47 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>lastpathcomponent</key>
-				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<true/>
-				<key>removeextension</key>
-				<false/>
-				<key>text</key>
-				<string>{query}</string>
-				<key>title</key>
-				<string>Github</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
-			<key>uid</key>
-			<string>16772598-5A71-4CC9-A6D7-ECAAC9299234</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>concurrently</key>
-				<true/>
+				<false/>
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${INIT_FILE} action $argv[1]</string>
+				<string># Inspired by:
+# https://github.com/jsumners/alfred-emoji#automatic-updates
+
+# Setting github variables
+readonly gh_repo='whomwah/alfred-github-workflow'
+readonly gh_url="https://api.github.com/repos/${gh_repo}/releases/latest"
+
+# Fetch latest version
+function fetch_remote_version {
+  curl --silent "${gh_url}" | grep 'tag_name' | head -1 | sed -E 's/.*tag_name": "v?(.*)".*/\1/'
+}
+
+# Fetch download url
+function fetch_download_url {
+  curl --silent "${gh_url}" | grep 'browser_download_url.*\.alfredworkflow"' | head -1 | sed -E 's/.*browser_download_url": "(.*)".*/\1/'
+}
+
+# Download and install workflow
+function download_and_install {
+  readonly tmpfile="$(mktemp).alfredworkflow"
+
+  echo "Downloading and installing version ${2}…"
+
+  curl --silent --location --output "${tmpfile}" "${1}"
+  open "${tmpfile}"
+  exit 0;
+}
+
+# Setting version and download url for later use
+readonly version="$(fetch_remote_version)"
+readonly download_url="$(fetch_download_url)"
+
+# Compare current version to installed version and download if required
+[ $(printf "%d%03d%03d%03d\n" $(echo ${alfred_workflow_version} | tr '.' ' ')) -lt $(printf "%d%03d%03d%03d\n" $(echo ${version} | tr '.' ' ')) ] &amp;&amp; download_and_install ${download_url} ${version}
+
+echo "You are running the latest version (${alfred_workflow_version})"</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -85,7 +139,7 @@
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</string>
+			<string>30C17AB4-36EF-4398-ADDF-B795D814F5F7</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -138,6 +192,82 @@
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string></string>
+						<key>matchcasesensitive</key>
+						<false/>
+						<key>matchmode</key>
+						<integer>4</integer>
+						<key>matchstring</key>
+						<string>^###update_available###.*</string>
+						<key>outputlabel</key>
+						<string></string>
+						<key>uid</key>
+						<string>D506270D-11C9-4E47-B23F-BF7184B034EF</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>else</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>4717FF19-F3EA-437A-9420-23401B9E626B</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<true/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${INIT_FILE} action $argv[1]</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>5</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Github</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>16772598-5A71-4CC9-A6D7-ECAAC9299234</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string># An Alfred 5 Workflow for Github
@@ -149,20 +279,44 @@ https://github.com/whomwah/alfred-github-workflow</string>
 	<dict>
 		<key>16772598-5A71-4CC9-A6D7-ECAAC9299234</key>
 		<dict>
+			<key>note</key>
+			<string>Notifiy user</string>
 			<key>xpos</key>
-			<real>740</real>
+			<real>720</real>
 			<key>ypos</key>
-			<real>140</real>
+			<real>400</real>
+		</dict>
+		<key>30C17AB4-36EF-4398-ADDF-B795D814F5F7</key>
+		<dict>
+			<key>note</key>
+			<string>Download new version of workflow if available</string>
+			<key>xpos</key>
+			<real>700</real>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
+		<key>4717FF19-F3EA-437A-9420-23401B9E626B</key>
+		<dict>
+			<key>note</key>
+			<string>Decide whether we have info and whether we are triggering an update or notifiying the user</string>
+			<key>xpos</key>
+			<real>485</real>
+			<key>ypos</key>
+			<real>165</real>
 		</dict>
 		<key>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</key>
 		<dict>
+			<key>note</key>
+			<string>Handles an actions that are triggered by the user</string>
 			<key>xpos</key>
-			<real>440</real>
+			<real>265</real>
 			<key>ypos</key>
-			<real>145</real>
+			<real>350</real>
 		</dict>
 		<key>D826D6D1-5C1A-45D5-8933-7B0BA272293A</key>
 		<dict>
+			<key>note</key>
+			<string>Main script that takes input and returns the items you see</string>
 			<key>xpos</key>
 			<real>90</real>
 			<key>ypos</key>
@@ -189,6 +343,40 @@ https://github.com/whomwah/alfred-github-workflow</string>
 			<string>checkbox</string>
 			<key>variable</key>
 			<string>checkForUpdates</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>weekly</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>Daily</string>
+						<string>daily</string>
+					</array>
+					<array>
+						<string>Weekly</string>
+						<string>weekly</string>
+					</array>
+					<array>
+						<string>Monthly</string>
+						<string>monthly</string>
+					</array>
+					<array>
+						<string>Yearly</string>
+						<string>yearly</string>
+					</array>
+				</array>
+			</dict>
+			<key>description</key>
+			<string>How often should we check for updates</string>
+			<key>label</key>
+			<string>Update frequency</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>updateFrequency</string>
 		</dict>
 	</array>
 	<key>variables</key>

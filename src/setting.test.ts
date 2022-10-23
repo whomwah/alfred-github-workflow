@@ -65,10 +65,7 @@ describe("When we have an access token", () => {
 
     assertEquals(items[3]?.title, "> check");
     assertEquals(items[3]?.icon, { path: "./icons/refresh.png" });
-    assertEquals(
-      items[3]?.arg,
-      "###workflow_updates###https://github.com/whomwah/alfred-github-workflow/releases",
-    );
+    assertEquals(items[3]?.arg, "###update_available###");
 
     assertEquals(items[4]?.title, "> src");
     assertEquals(items[4]?.icon, { path: "./icons/book.png" });
@@ -107,10 +104,7 @@ describe("When we have an access token", () => {
 
     assertEquals(items[3]?.title, "> check");
     assertEquals(items[3]?.icon, { path: "./icons/refresh.png" });
-    assertEquals(
-      items[3]?.arg,
-      "###workflow_updates###https://github.com/whomwah/alfred-github-workflow/releases",
-    );
+    assertEquals(items[3]?.arg, "###update_available###");
 
     assertEquals(items[4]?.title, "> help");
     assertEquals(

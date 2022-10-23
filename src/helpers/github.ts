@@ -29,8 +29,13 @@ export interface GhUser {
   site_admin: boolean;
 }
 
+type GHAsset = {
+  browser_download_url: string;
+};
+
 export interface GhRelease {
   tag_name: string;
+  assets: GHAsset[];
 }
 
 export interface GhRepo {
