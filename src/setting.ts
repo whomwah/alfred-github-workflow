@@ -87,9 +87,8 @@ export default function Setting(
       },
       {
         title: `${prefix} check`,
-        subtitle: "Check for newer available versions of the workflow",
-        arg:
-          `###workflow_updates###${config.baseUrl}/whomwah/alfred-github-workflow/releases`,
+        subtitle: "Check for an update to the workflow",
+        arg: `###update_available###`,
         icon: "refresh",
       },
     ];

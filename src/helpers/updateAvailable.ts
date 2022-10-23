@@ -3,7 +3,22 @@ import { BuilderType, BuildItem } from "./builder.ts";
 import { Config, storeConfig } from "./config.ts";
 import { fetchData, GhRelease } from "./github.ts";
 
+type FrequencyOptions = {
+  [index: string]: number;
+};
+
 const workflowRepo = "whomwah/alfred-github-workflow";
+const updateFrequency: FrequencyOptions = {
+  daily: 1,
+  weekly: 7,
+  monthly: 30,
+  yearly: 365,
+};
+
+const frequency = () => {
+  const freqEnv = Deno.env.get("updateFrequency") || "weekly";
+  return updateFrequency[freqEnv];
+};
 
 export async function updateAvailableItem(
   builder: BuilderType,
@@ -23,7 +38,7 @@ export async function updateAvailableItem(
     subtitle:
       `A new version ${config.latestVersion} (current: ${config.currentVersion}) is available for download`,
     icon: "folder",
-    arg: `${config.baseUrl}/${workflowRepo}/releases/v${config.latestVersion}`,
+    arg: `###update_available###`,
     skipUID: true,
     skipMatch: true,
   };
@@ -33,21 +48,17 @@ export async function updateAvailableItem(
 
 async function fetchAndStore(config: Config, now: number) {
   const response = await fetchData(
-    `${config.baseApiUrl}/repos/${workflowRepo}/releases`,
+    `${config.baseApiUrl}/repos/${workflowRepo}/releases/latest`,
     config.token,
   );
-  const releases: GhRelease[] = await response.json();
+  const releases: GhRelease = await response.json();
 
-  storeConfig(
-    config.db,
-    "latestVersion",
-    releases[0].tag_name.replace("v", ""),
-  );
+  storeConfig(config.db, "latestVersion", releases.tag_name.replace("v", ""));
   storeConfig(config.db, "latestVersionLastChecked", String(now));
 }
 
 async function cacheRelease(now: number, config: Config) {
-  const invalidateCacheDate = now - 1000 * 60 * 60 * 24 * 7; // 7 days
+  const invalidateCacheDate = now - 1000 * 60 * 60 * 24 * frequency();
   const lastChecked = config.latestVersionLastChecked;
 
   if (lastChecked < invalidateCacheDate) {
