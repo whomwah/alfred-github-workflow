@@ -8,7 +8,6 @@ import { DB } from "../deps.ts";
 import { CacheItem } from "./helpers/cache.ts";
 import { Config } from "./helpers/config.ts";
 import { queryArgs } from "./helpers/query.ts";
-import { Item } from "./item.ts";
 import Setting, { _internals } from "./setting.ts";
 
 const config = {
@@ -22,7 +21,7 @@ const config = {
 describe("When we have no access token", () => {
   it("it should show login options", async () => {
     const query = ">";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
@@ -33,7 +32,7 @@ describe("When we have no access token", () => {
 
   it("it should show login with token", async () => {
     const query = "> login abc";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
@@ -46,7 +45,7 @@ describe("When we have an access token", () => {
   it("it should valid settings", async () => {
     config.token = "abcdefg123444";
     const query = ">";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
@@ -85,7 +84,7 @@ describe("When we have an access token", () => {
 
     config.token = "abcdefg123444";
     const query = ">";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query, ">");
     await Setting(args, items, config);
 
@@ -134,7 +133,7 @@ describe("When we have an access token", () => {
 
     try {
       const query = "> clear";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query, ">");
       await Setting(args, items, config);
 
@@ -177,7 +176,7 @@ describe("When we have an access token", () => {
 
     try {
       const query = "> clear follow";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query, ">");
       await Setting(args, items, config);
 

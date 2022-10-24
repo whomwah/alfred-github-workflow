@@ -8,7 +8,6 @@ import { DB } from "../deps.ts";
 import { Config } from "./helpers/config.ts";
 import { GhUser } from "./helpers/github.ts";
 import { queryArgs } from "./helpers/query.ts";
-import { Item } from "./item.ts";
 import Mine, { _internals } from "./mine.ts";
 
 const config = {
@@ -22,7 +21,7 @@ const config = {
 describe("When we have an empty token", () => {
   it("it should show nothing", async () => {
     const query = "my";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query, "my");
     await Mine(args, items, config);
 
@@ -38,7 +37,7 @@ describe("When we have a access token", () => {
 
     try {
       const query = "my";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query, "my");
       await Mine(args, items, config);
 
@@ -115,7 +114,7 @@ describe("When we have a access token", () => {
 
     try {
       const query = "my notifications";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query, "my");
       await Mine(args, items, config);
 
@@ -145,7 +144,7 @@ describe("When we have a access token", () => {
 
     try {
       const query = "my zzzzzzzzzzzzzzzzzzzzz";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query, "my");
       await Mine(args, items, config);
 
