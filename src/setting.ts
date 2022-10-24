@@ -1,15 +1,15 @@
+import "./alfred.d.ts";
 import Builder, { BuildItem, loginCommands } from "./helpers/builder.ts";
-import { Item } from "./item.ts";
 import { Config } from "./helpers/config.ts";
-import { QueryArgs } from "./helpers/query.ts";
 import { cacheItems } from "./helpers/cache.ts";
 import { mapCacheItemToItem } from "./helpers/mapping.ts";
 import { hasCustomSrcPath } from "./helpers/url.ts";
 import { updateAvailableItem } from "./helpers/updateAvailable.ts";
+import { QueryArgs } from "./helpers/query.ts";
 
 export default function Setting(
   queryArgs: QueryArgs,
-  listItems: Item[],
+  listItems: Alfred.Item[],
   config: Config,
 ) {
   const items = listItems;

@@ -1,9 +1,9 @@
-import { Item } from "../item.ts";
+import "../alfred.d.ts";
 import { fuzzyMatch } from "./utils.ts";
 import { createMd5Hash } from "./md5.ts";
-import { QueryArgs } from "./query.ts";
 import { Config } from "./config.ts";
 import { OAUTH_URL } from "../../env.ts";
+import { QueryArgs } from "./query.ts";
 
 export interface BuildItem {
   title: string;
@@ -20,13 +20,13 @@ export interface BuilderType {
   addItem: (item: BuildItem) => Promise<void>;
 }
 
-export default function Builder(queryArgs: QueryArgs, items: Item[]) {
-  const buildListItem = async (item: BuildItem): Promise<Item> => {
+export default function Builder(queryArgs: QueryArgs, items: Alfred.Item[]) {
+  const buildListItem = async (item: BuildItem): Promise<Alfred.Item> => {
     const icon = {
       path: item.icon ? `./icons/${item.icon}.png` : "./icon.png",
     };
     const arg = item.arg || queryArgs.query;
-    const payload: Item = {
+    const payload: Alfred.Item = {
       title: item.title,
       valid: item.valid === false ? false : true,
       icon,
@@ -47,7 +47,7 @@ export default function Builder(queryArgs: QueryArgs, items: Item[]) {
     return payload;
   };
 
-  const addListItem = (item: Item) => items.push(item);
+  const addListItem = (item: Alfred.Item) => items.push(item);
 
   return {
     addItem: async (item: BuildItem) => {

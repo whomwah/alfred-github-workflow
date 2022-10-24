@@ -8,7 +8,6 @@ import { DB } from "../deps.ts";
 import { Config } from "./helpers/config.ts";
 import { GhRepo, GhUser } from "./helpers/github.ts";
 import { queryArgs } from "./helpers/query.ts";
-import { Item } from "./item.ts";
 import Search, { _internals } from "./search.ts";
 
 const config = {
@@ -22,7 +21,7 @@ const config = {
 describe("When we have an empty access token", () => {
   it("it should show login options", async () => {
     const query = "";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query);
     await Search(args, items, config);
 
@@ -42,7 +41,7 @@ describe("When we have an empty access token", () => {
 
   it("it should handle token in query", async () => {
     const query = "login abc123";
-    const items: Item[] = [];
+    const items: Alfred.Item[] = [];
     const args = queryArgs(query);
     await Search(args, items, config);
 
@@ -80,7 +79,7 @@ describe("When we have a access token", () => {
 
     try {
       const query = "rqre";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query);
       await Search(args, items, config);
 
@@ -132,7 +131,7 @@ describe("When we have a access token", () => {
 
     try {
       const query = "";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query);
       await Search(args, items, config);
 
@@ -188,7 +187,7 @@ describe("When we have a access token", () => {
 
     try {
       const query = "xxxxxxxxxxxxxx";
-      const items: Item[] = [];
+      const items: Alfred.Item[] = [];
       const args = queryArgs(query);
       await Search(args, items, config);
 

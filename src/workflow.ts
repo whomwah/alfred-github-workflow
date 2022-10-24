@@ -1,13 +1,13 @@
+import "./alfred.d.ts";
 import { dbConnect, init } from "./setup.ts";
 import Setting from "./setting.ts";
 import User from "./user.ts";
 import Mine from "./mine.ts";
 import Search from "./search.ts";
-import { Item } from "./item.ts";
 import { queryArgs } from "./helpers/query.ts";
 
 export default async function Workflow(query: string) {
-  const items: Item[] = [];
+  const items: Alfred.Item[] = [];
   const db = await dbConnect();
 
   await init(db, async (config) => {

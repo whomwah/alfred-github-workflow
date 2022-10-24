@@ -1,15 +1,15 @@
+import "./alfred.d.ts";
 import Builder, { loginCommands, searchGithub } from "./helpers/builder.ts";
 import { mapRepoToItem, mapUserToItem } from "./helpers/mapping.ts";
-import { QueryArgs } from "./helpers/query.ts";
 import { Config } from "./helpers/config.ts";
 import { cacheFetchAll } from "./helpers/cache.ts";
-import { Item } from "./item.ts";
 import { GhRepo, GhUser } from "./helpers/github.ts";
 import { updateAvailableItem } from "./helpers/updateAvailable.ts";
+import { QueryArgs } from "./helpers/query.ts";
 
 export default function Search(
   queryArgs: QueryArgs,
-  listItems: Item[],
+  listItems: Alfred.Item[],
   config: Config,
 ) {
   const items = listItems;
