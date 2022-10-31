@@ -279,6 +279,15 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
+## [1.6.3](https://github.com/whomwah/alfred-github-workflow/compare/v1.6.2...v1.6.3) (2022-10-31)
+
+
+### Bug Fixes
+
+* add badge and test release notes in new build ([e64ead4](https://github.com/whomwah/alfred-github-workflow/commit/e64ead4301b07756b2d479d1bc8ceb6758f44f91))
+
+
+
 
 
 To view other releases visit:
@@ -393,7 +402,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.6.2</string>
+	<string>1.6.3</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
