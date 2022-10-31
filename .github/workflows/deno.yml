@@ -16,11 +16,11 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_AUTH_TOKEN }}
-      - uses: denoland/setup-deno@v1.1.0
+      - uses: denoland/setup-deno@v1.1.1
         with:
           deno-version: v1.x # Run with latest stable Deno.
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: Setup package.json
