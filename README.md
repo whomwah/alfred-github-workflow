@@ -1,5 +1,8 @@
 # An Alfred 5 Workflow for working with Github
 
+![](https://github.com/whomwah/alfred-github-workflow/actions/workflows/tests.yml/badge.svg)
+[![semantic-release: deno](https://img.shields.io/badge/semantic--release-deno-blue?logo=deno)](https://github.com/semantic-release/semantic-release)
+
 This workflow is inspired by
 [Alfred workflow](https://github.com/gharlan/alfred-github-workflow) by
 [Gregor Harlan](https://github.com/gharlan). It uses [Deno](https://deno.land/).

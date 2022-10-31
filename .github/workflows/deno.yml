@@ -2,7 +2,7 @@ name: Deno CI
 
 on:
   workflow_run:
-    workflows: [Run Tests]
+    workflows: [Workflow Tests]
     types:
       - completed
 
