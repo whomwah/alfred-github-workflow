@@ -271,11 +271,18 @@ echo "You are running the latest version (${alfred_workflow_version})"</string>
 		</dict>
 	</array>
 	<key>readme</key>
-	<string># An Alfred 5 Workflow for Github
+	<string># Github Workflow
 
-For instructions on usage please visit:
+For full instructions on usage please visit:
+https://github.com/whomwah/alfred-github-workflow
 
-https://github.com/whomwah/alfred-github-workflow</string>
+
+#### Latest Release
+
+
+
+To view other releases visit:
+https://github.com/whomwah/alfred-github-workflow/releases</string>
 	<key>uidata</key>
 	<dict>
 		<key>16772598-5A71-4CC9-A6D7-ECAAC9299234</key>
@@ -386,7 +393,7 @@ https://github.com/whomwah/alfred-github-workflow</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.6.1</string>
+	<string>1.6.2</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
