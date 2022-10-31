@@ -102,12 +102,12 @@ readonly gh_url="https://api.github.com/repos/${gh_repo}/releases/latest"
 
 # Fetch latest version
 function fetch_remote_version {
-  curl --silent "${gh_url}" | grep 'tag_name' | head -1 | sed -E 's/.*tag_name": "v?(.*)".*/\1/'
+  echo $1 | grep 'tag_name' | head -1 | sed -E 's/.*tag_name": "v?(.*)".*/\1/'
 }
 
 # Fetch download url
 function fetch_download_url {
-  curl --silent "${gh_url}" | grep 'browser_download_url.*\.alfredworkflow"' | head -1 | sed -E 's/.*browser_download_url": "(.*)".*/\1/'
+  echo $1 | grep 'browser_download_url.*\.alfredworkflow"' | head -1 | sed -E 's/.*browser_download_url": "(.*)".*/\1/'
 }
 
 # Download and install workflow
@@ -122,8 +122,9 @@ function download_and_install {
 }
 
 # Setting version and download url for later use
-readonly version="$(fetch_remote_version)"
-readonly download_url="$(fetch_download_url)"
+readonly response=$(curl --silent "${gh_url}")
+readonly version="$(fetch_remote_version $response)"
+readonly download_url="$(fetch_download_url $response)"
 
 # Compare current version to installed version and download if required
 [ $(printf "%d%03d%03d%03d\n" $(echo ${alfred_workflow_version} | tr '.' ' ')) -lt $(printf "%d%03d%03d%03d\n" $(echo ${version} | tr '.' ' ')) ] &amp;&amp; download_and_install ${download_url} ${version}
