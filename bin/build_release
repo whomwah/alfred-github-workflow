@@ -1,9 +1,31 @@
 #!/usr/bin/env sh
 
+set -e
 VERSION=$1
+NOTES=$2
 
 echo "updating VERSION to $VERSION in info.plist... ✅"
 /usr/libexec/PlistBuddy -c "Set :version $VERSION" info.plist
+
+echo "adding release notes to info.plist... ✅"
+readonly readme=$(cat <<-END
+# Github Workflow
+
+For full instructions on usage please visit:
+https://github.com/whomwah/alfred-github-workflow
+
+
+#### Latest Release\n\n
+END
+)
+readonly finishup=$(cat <<-END
+
+
+To view other releases visit:
+https://github.com/whomwah/alfred-github-workflow/releases
+END
+)
+/usr/libexec/PlistBuddy -c "Set :readme  $readme$NOTES$finishup" info.plist
 
 echo "bundle and minify workflow... ✅"
 deno bundle mod.ts | esbuild --minify-whitespace --minify-identifiers > mod.min.js
