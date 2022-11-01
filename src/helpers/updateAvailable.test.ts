@@ -1,5 +1,4 @@
 import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std@0.156.0/testing/bdd.ts";
 import {
   assertSpyCall,
   stub,
@@ -8,8 +7,8 @@ import { FakeTime } from "https://deno.land/std@0.160.0/testing/time.ts";
 import { Config } from "./config.ts";
 import { _internals, updateAvailableItem } from "./updateAvailable.ts";
 
-describe("#updateAvailableItem", () => {
-  it("it handle not checking for updates", async () => {
+Deno.test("#updateAvailableItem", async (t) => {
+  await t.step("it handle not checking for updates", async () => {
     const config = {
       checkForUpdates: false,
     } as Config;
@@ -18,72 +17,81 @@ describe("#updateAvailableItem", () => {
     assertEquals(update, null);
   });
 
-  it("it handles when current version is 1.0.0 and latest 1.0.0", async () => {
-    const cacheRelease = stub(_internals, "cacheRelease");
+  await t.step(
+    "it handles when current version is 1.0.0 and latest 1.0.0",
+    async () => {
+      const cacheRelease = stub(_internals, "cacheRelease");
 
-    try {
-      const config = {
-        checkForUpdates: true,
-        latestVersion: "1.0.0",
-        currentVersion: "1.0.0",
-      } as Config;
+      try {
+        const config = {
+          checkForUpdates: true,
+          latestVersion: "1.0.0",
+          currentVersion: "1.0.0",
+        } as Config;
+        const builder = { addItem: () => Promise.resolve() };
+        const update = await updateAvailableItem(builder, config);
+        assertEquals(update, null);
+      } finally {
+        cacheRelease.restore();
+      }
+    },
+  );
+
+  await t.step(
+    "it handles when current version is 1.0.0 and latest 0.9.0",
+    async () => {
+      const cacheRelease = stub(_internals, "cacheRelease");
+
+      try {
+        const config = {
+          checkForUpdates: true,
+          latestVersion: "0.9.0",
+          currentVersion: "1.0.0",
+        } as Config;
+        const builder = { addItem: () => Promise.resolve() };
+        const update = await updateAvailableItem(builder, config);
+        assertEquals(update, null);
+      } finally {
+        cacheRelease.restore();
+      }
+    },
+  );
+
+  await t.step(
+    "it handles when current version is 1.0.0 and latest 2.0.0",
+    async () => {
+      const cacheRelease = stub(_internals, "cacheRelease");
       const builder = { addItem: () => Promise.resolve() };
-      const update = await updateAvailableItem(builder, config);
-      assertEquals(update, null);
-    } finally {
-      cacheRelease.restore();
-    }
-  });
+      const buildStub = stub(builder, "addItem");
 
-  it("it handles when current version is 1.0.0 and latest 0.9.0", async () => {
-    const cacheRelease = stub(_internals, "cacheRelease");
+      try {
+        const config = {
+          checkForUpdates: true,
+          latestVersion: "2.0.0",
+          currentVersion: "1.0.0",
+        } as Config;
+        const update = await updateAvailableItem(builder, config);
+        assertSpyCall(buildStub, 0, {
+          args: [
+            {
+              arg: "###update_available###",
+              icon: "folder",
+              skipMatch: true,
+              skipUID: true,
+              subtitle:
+                "A new version 2.0.0 (current: 1.0.0) is available for download",
+              title: "Update available (2.0.0)",
+            },
+          ],
+        });
+        assertEquals(update, undefined);
+      } finally {
+        cacheRelease.restore();
+      }
+    },
+  );
 
-    try {
-      const config = {
-        checkForUpdates: true,
-        latestVersion: "0.9.0",
-        currentVersion: "1.0.0",
-      } as Config;
-      const builder = { addItem: () => Promise.resolve() };
-      const update = await updateAvailableItem(builder, config);
-      assertEquals(update, null);
-    } finally {
-      cacheRelease.restore();
-    }
-  });
-
-  it("it handles when current version is 1.0.0 and latest 2.0.0", async () => {
-    const cacheRelease = stub(_internals, "cacheRelease");
-    const builder = { addItem: () => Promise.resolve() };
-    const buildStub = stub(builder, "addItem");
-
-    try {
-      const config = {
-        checkForUpdates: true,
-        latestVersion: "2.0.0",
-        currentVersion: "1.0.0",
-      } as Config;
-      const update = await updateAvailableItem(builder, config);
-      assertSpyCall(buildStub, 0, {
-        args: [
-          {
-            arg: "###update_available###",
-            icon: "folder",
-            skipMatch: true,
-            skipUID: true,
-            subtitle:
-              "A new version 2.0.0 (current: 1.0.0) is available for download",
-            title: "Update available (2.0.0)",
-          },
-        ],
-      });
-      assertEquals(update, undefined);
-    } finally {
-      cacheRelease.restore();
-    }
-  });
-
-  it("it does check weekly minus 1 second ago", async () => {
+  await t.step("it does check weekly minus 1 second ago", async () => {
     const fetchAndStore = stub(_internals, "fetchAndStore");
     const builder = { addItem: () => Promise.resolve() };
     const timeEpoch = 1666000000000;
@@ -109,7 +117,7 @@ describe("#updateAvailableItem", () => {
     }
   });
 
-  it("it doesn't check weekly plus 1 second ago", async () => {
+  await t.step("it doesn't check weekly plus 1 second ago", async () => {
     const builder = { addItem: () => Promise.resolve() };
     const timeEpoch = 1666000000000;
     const time = new FakeTime(timeEpoch);
@@ -130,33 +138,36 @@ describe("#updateAvailableItem", () => {
     }
   });
 
-  it("it does check daily if set in preferences plus 1 second", async () => {
-    const originalInitFile = Deno.env.get("updateFrequency");
-    Deno.env.set("updateFrequency", "daily");
+  await t.step(
+    "it does check daily if set in preferences plus 1 second",
+    async () => {
+      const originalInitFile = Deno.env.get("updateFrequency");
+      Deno.env.set("updateFrequency", "daily");
 
-    const builder = { addItem: () => Promise.resolve() };
-    const timeEpoch = 1666000000000;
-    const time = new FakeTime(timeEpoch);
-    // 1 day and 1 second ago
-    const lastChecked = timeEpoch - 1000 * 60 * 60 * 24 * 1 + 1;
+      const builder = { addItem: () => Promise.resolve() };
+      const timeEpoch = 1666000000000;
+      const time = new FakeTime(timeEpoch);
+      // 1 day and 1 second ago
+      const lastChecked = timeEpoch - 1000 * 60 * 60 * 24 * 1 + 1;
 
-    try {
-      const config = {
-        checkForUpdates: true,
-        latestVersion: "2.0.0",
-        currentVersion: "1.0.0",
-        latestVersionLastChecked: lastChecked,
-      } as Config;
-      const update = await updateAvailableItem(builder, config);
-      assertEquals(update, undefined);
-    } finally {
-      time.restore();
-    }
+      try {
+        const config = {
+          checkForUpdates: true,
+          latestVersion: "2.0.0",
+          currentVersion: "1.0.0",
+          latestVersionLastChecked: lastChecked,
+        } as Config;
+        const update = await updateAvailableItem(builder, config);
+        assertEquals(update, undefined);
+      } finally {
+        time.restore();
+      }
 
-    if (originalInitFile) {
-      Deno.env.set("updateFrequency", originalInitFile);
-    } else {
-      Deno.env.delete("updateFrequency");
-    }
-  });
+      if (originalInitFile) {
+        Deno.env.set("updateFrequency", originalInitFile);
+      } else {
+        Deno.env.delete("updateFrequency");
+      }
+    },
+  );
 });
