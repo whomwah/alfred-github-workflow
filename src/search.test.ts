@@ -1,5 +1,4 @@
 import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std@0.156.0/testing/bdd.ts";
 import {
   resolvesNext,
   stub,
@@ -18,8 +17,8 @@ const config = {
   db: "" as unknown as DB,
 } as Config;
 
-describe("When we have an empty access token", () => {
-  it("it should show login options", async () => {
+Deno.test("When we have an empty access token", async (t) => {
+  await t.step("it should show login options", async () => {
     const query = "";
     const items: Alfred.Item[] = [];
     const args = queryArgs(query);
@@ -39,7 +38,7 @@ describe("When we have an empty access token", () => {
     assertEquals(items[1].icon, { path: "./icons/login.png" });
   });
 
-  it("it should handle token in query", async () => {
+  await t.step("it should handle token in query", async () => {
     const query = "login abc123";
     const items: Alfred.Item[] = [];
     const args = queryArgs(query);
@@ -53,8 +52,8 @@ describe("When we have an empty access token", () => {
   });
 });
 
-describe("When we have a access token", () => {
-  it("it should show partial results", async () => {
+Deno.test("When we have a access token", async (t) => {
+  await t.step("it should show partial results", async () => {
     config.token = "abcdefg123444";
     const user = {
       login: "whomwah",
@@ -106,7 +105,7 @@ describe("When we have a access token", () => {
     }
   });
 
-  it("it should show full results", async () => {
+  await t.step("it should show full results", async () => {
     config.token = "abcdefg123444";
     const user = {
       login: "whomwah",
@@ -162,7 +161,7 @@ describe("When we have a access token", () => {
     }
   });
 
-  it("it should fallback to search", async () => {
+  await t.step("it should fallback to search", async () => {
     config.token = "abcdefg123444";
     const user = {
       login: "whomwah",

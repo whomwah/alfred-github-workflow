@@ -1,9 +1,8 @@
 import { assert } from "https://deno.land/std@0.154.0/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std@0.156.0/testing/bdd.ts";
 import { fuzzyMatch } from "./utils.ts";
 
-describe("#fuzzyMatch", () => {
-  it("it handles various matches", () => {
+Deno.test("#fuzzyMatch", async (t) => {
+  await t.step("it handles various matches", () => {
     assert(fuzzyMatch("duncan", "du"));
     assert(fuzzyMatch("duncan", "can"));
     assert(fuzzyMatch("duncan", "dcan"));
