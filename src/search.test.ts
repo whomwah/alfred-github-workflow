@@ -26,14 +26,16 @@ Deno.test("When we have an empty access token", async (t) => {
 
     assertEquals(items.length, 2);
 
-    assertEquals(items[0].title, "> login");
+    assertEquals(items[0].title, "Login");
+    assertEquals(items[0].autocomplete, "> login");
     assertEquals(
       items[0].arg,
-      "###login###https://github.com/login/oauth/authorize?client_id=869cbedd6ed52af80986&scope=repo&state=robotsonghalfredworkflow",
+      "###login###https://github.com/login/oauth/authorize?client_id=869cbedd6ed52af80986&scope=repo,gist&state=robotsonghalfredworkflow",
     );
     assertEquals(items[0].icon, { path: "./icons/login.png" });
 
-    assertEquals(items[1].title, "> login <access_token>");
+    assertEquals(items[1].title, "Login <access_token>");
+    assertEquals(items[1].autocomplete, "> login ");
     assertEquals(items[1].arg, "###login_with_token###<access_token>");
     assertEquals(items[1].icon, { path: "./icons/login.png" });
   });
@@ -46,7 +48,8 @@ Deno.test("When we have an empty access token", async (t) => {
 
     assertEquals(items.length, 1);
 
-    assertEquals(items[0].title, "> login abc123");
+    assertEquals(items[0].title, "Login abc123");
+    assertEquals(items[0].autocomplete, "> login ");
     assertEquals(items[0].arg, "###login_with_token###abc123");
     assertEquals(items[0].icon, { path: "./icons/login.png" });
   });
@@ -85,11 +88,13 @@ Deno.test("When we have a access token", async (t) => {
       assertEquals(items.length, 3);
 
       assertEquals(items[0].title, "whomwah/rqrcode");
+      assertEquals(items[0].autocomplete, "whomwah/rqrcode ");
       assertEquals(items[0].subtitle, "A lib for encoding QR Codes");
       assertEquals(items[0].arg, "http://rqrcode.com");
       assertEquals(items[0].icon, { path: "./icons/repos.png" });
 
       assertEquals(items[1].title, "whomwah/rqrcode_core");
+      assertEquals(items[1].autocomplete, "whomwah/rqrcode_core ");
       assertEquals(items[1].subtitle, "A core lib for encoding QR Codes");
       assertEquals(items[1].arg, "http://rqrcode-core.com");
       assertEquals(items[1].icon, { path: "./icons/private-repo.png" });
@@ -134,26 +139,29 @@ Deno.test("When we have a access token", async (t) => {
       const args = queryArgs(query);
       await Search(args, items, config);
 
-      assertEquals(items.length, 4);
+      assertEquals(items.length, 5);
 
-      assertEquals(items[0].title, "whomwah/rqrcode");
-      assertEquals(items[0].subtitle, "A lib for encoding QR Codes");
-      assertEquals(items[0].arg, "http://rqrcode.com");
-      assertEquals(items[0].icon, { path: "./icons/repos.png" });
+      assertEquals(items[0].title, "My ...");
+      assertEquals(items[0].subtitle, "Pull requests, Repos, Setting etc...");
+      assertEquals(items[0].icon, { path: "./icons/forward.png" });
 
-      assertEquals(items[1].title, "@whomwah");
-      assertEquals(items[1].arg, "http://foo.com");
-      assertEquals(items[1].icon, { path: "./icons/user.png" });
+      assertEquals(items[1].title, "Gists ...");
+      assertEquals(items[1].subtitle, "View your Gists");
+      assertEquals(items[1].icon, { path: "./icons/forward.png" });
 
-      assertEquals(items[2].title, "whomwah/rqrcode_core");
-      assertEquals(items[2].subtitle, "A core lib for encoding QR Codes");
-      assertEquals(items[2].arg, "http://rqrcode-core.com");
-      assertEquals(items[2].icon, { path: "./icons/private-repo.png" });
+      assertEquals(items[2].title, "whomwah/rqrcode");
+      assertEquals(items[2].subtitle, "A lib for encoding QR Codes");
+      assertEquals(items[2].arg, "http://rqrcode.com");
+      assertEquals(items[2].icon, { path: "./icons/repos.png" });
 
-      assertEquals(items[3].title, "Search Github for ''");
-      assertEquals(items[3].arg, "https://github.com/search?q=");
-      assertEquals(items[3].icon, { path: "./icon.png" });
-      assertEquals(items[3].valid, true);
+      assertEquals(items[3].title, "@whomwah");
+      assertEquals(items[3].arg, "http://foo.com");
+      assertEquals(items[3].icon, { path: "./icons/user.png" });
+
+      assertEquals(items[4].title, "whomwah/rqrcode_core");
+      assertEquals(items[4].subtitle, "A core lib for encoding QR Codes");
+      assertEquals(items[4].arg, "http://rqrcode-core.com");
+      assertEquals(items[4].icon, { path: "./icons/private-repo.png" });
     } finally {
       userFetch.restore();
       repoFetch.restore();

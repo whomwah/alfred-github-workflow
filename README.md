@@ -42,10 +42,10 @@ There are a few top level commands and other than that you just start typing a
 the auto complete key (⇥ by default) will show you any other sub commands
 available.
 
-```
+```bash
 # Settings
 
-gh >...
+gh > ...
 
 # User commands
 
@@ -53,7 +53,11 @@ gh @...
 
 # Your personal commands
 
-gh my...
+gh my ...
+
+# Your gists
+
+gh gists ...
 
 # Anything else
 
@@ -73,7 +77,7 @@ You will first need to install `deno` as mentioned earlier in this README.
 
 ### Tests
 
-`deno test`
+`deno test --allow-env`
 
 ### Formatting
 

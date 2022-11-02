@@ -1,5 +1,9 @@
 import "./alfred.d.ts";
-import Builder, { loginCommands, searchGithub } from "./helpers/builder.ts";
+import Builder, {
+  BuildItem,
+  loginCommands,
+  searchGithub,
+} from "./helpers/builder.ts";
 import { mapRepoToItem, mapUserToItem } from "./helpers/mapping.ts";
 import { Config } from "./helpers/config.ts";
 import { cacheFetchAll } from "./helpers/cache.ts";
@@ -32,6 +36,7 @@ export default function Search(
     const stars = await _internals.fetchStars(config);
 
     return Promise.all([
+      ...subCommands.map((cmd) => builder.addItem(cmd)),
       ...repos.map((repo) => builder.addItem(mapRepoToItem(repo))),
       ...users.map((user) => builder.addItem(mapUserToItem(user))),
       ...stars.map((repo) => builder.addItem(mapRepoToItem(repo))),
@@ -143,6 +148,21 @@ export default function Search(
       }),
     );
   };
+
+  const subCommands: BuildItem[] = [
+    {
+      matchStr: "my ",
+      title: "My ...",
+      subtitle: "Pull requests, Repos, Setting etc...",
+      icon: "forward",
+    },
+    {
+      matchStr: "gists ",
+      title: "Gists ...",
+      subtitle: "View your Gists",
+      icon: "forward",
+    },
+  ];
 
   const fallback = () => searchGithub(builder, queryArgs, config);
 

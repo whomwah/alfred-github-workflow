@@ -6,6 +6,7 @@ import { OAUTH_URL } from "../../env.ts";
 import { QueryArgs } from "./query.ts";
 
 export interface BuildItem {
+  matchStr?: string;
   title: string;
   subtitle?: string | null;
   icon?: string;
@@ -41,7 +42,7 @@ export default function Builder(queryArgs: QueryArgs, items: Alfred.Item[]) {
     } else if (typeof item.autocomplete == "string") {
       payload.autocomplete = item.autocomplete;
     } else {
-      payload.autocomplete = item.title;
+      payload.autocomplete = item.matchStr || item.title;
     }
 
     return payload;
@@ -51,7 +52,10 @@ export default function Builder(queryArgs: QueryArgs, items: Alfred.Item[]) {
 
   return {
     addItem: async (item: BuildItem) => {
-      if (item.skipMatch || matches(item.title, queryArgs.query)) {
+      if (
+        item.skipMatch ||
+        matches(item.matchStr || item.title, queryArgs.query)
+      ) {
         addListItem(await buildListItem(item));
       }
     },
@@ -62,15 +66,19 @@ export function searchGithub(
   builder: BuilderType,
   queryArgs: QueryArgs,
   config: Config,
+  type?: string,
 ) {
+  const searchString = queryArgs.lastPart;
+  const typeQuery = type ? `&type=${type}` : "";
   const item: BuildItem = {
-    title: `Search Github for '${queryArgs.query}'`,
+    title: `Search Github for '${searchString}'`,
     autocomplete: false,
-    arg: `${config.baseUrl}/search?q=${queryArgs.query}`,
+    arg: `${config.baseUrl}/search?q=${searchString}${typeQuery}`,
     skipUID: true,
     skipMatch: true,
   };
 
+  if (searchString === "") return;
   return builder.addItem(item);
 }
 
@@ -79,17 +87,19 @@ export function loginCommands(queryArgs: QueryArgs, builder: BuilderType) {
   const providedToken = extractLoginToken(queryArgs.parts);
   const loginGenerateTokenCmd = () =>
     builder.addItem({
-      title: `> login`,
+      matchStr: `> login`,
+      title: `Login`,
       subtitle: "Generate OAuth access token",
       icon: "login",
       arg: `###login###${OAUTH_URL}`,
     });
   const loginSaveTokenCmd = (token: string, valid: boolean) =>
     builder.addItem({
-      title: `> login ${token}`,
+      matchStr: `> login ${token}`,
+      autocomplete: `> login `,
+      title: `Login ${token}`,
       subtitle: "Save access token",
       icon: "login",
-      autocomplete: `> login `,
       arg: `###login_with_token###${token}`,
       valid,
     });
@@ -110,4 +120,6 @@ function extractLoginToken(parts: string[]) {
   }
 }
 
-const matches = (title: string, action: string) => fuzzyMatch(title, action);
+function matches(title: string, action: string) {
+  return fuzzyMatch(title.toLowerCase(), action);
+}

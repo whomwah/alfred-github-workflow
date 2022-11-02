@@ -73,7 +73,7 @@ export default function User(
     );
   };
 
-  const fallback = () => searchGithub(builder, queryArgs, config);
+  const fallback = () => searchGithub(builder, queryArgs, config, "users");
 
   return commands();
 }

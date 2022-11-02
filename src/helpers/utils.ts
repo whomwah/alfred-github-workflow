@@ -1,3 +1,5 @@
+import "../alfred.d.ts";
+
 export function fuzzyMatch(haystack: string, needle: string) {
   if (!haystack) return true;
 
@@ -16,4 +18,13 @@ export function fuzzyMatch(haystack: string, needle: string) {
   }
 
   return true;
+}
+
+export function uniq(list: Alfred.Item[]) {
+  const ids = list.map((o) => o.uid);
+  return list.filter(({ uid }, index) => !ids.includes(uid, index + 1));
+}
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

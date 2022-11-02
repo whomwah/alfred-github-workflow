@@ -4,7 +4,9 @@ import Setting from "./setting.ts";
 import User from "./user.ts";
 import Mine from "./mine.ts";
 import Search from "./search.ts";
+import Gists from "./gists.ts";
 import { queryArgs } from "./helpers/query.ts";
+import { uniq } from "./helpers/utils.ts";
 
 export default async function Workflow(query: string) {
   const items: Alfred.Item[] = [];
@@ -18,8 +20,11 @@ export default async function Workflow(query: string) {
       case /^@([a-z-]+(\s+))?([a-z-]+)?$/.test(query):
         await User(queryArgs(query, "@"), items, config);
         break;
-      case /^my([a-zA-Z0-9_\s]+)?$/.test(query):
+      case /^my ([a-zA-Z0-9_]+)?$/.test(query):
         await Mine(queryArgs(query, "my"), items, config);
+        break;
+      case /^gists ([a-zA-Z0-9_]+)?$/.test(query):
+        await Gists(queryArgs(query, "gists"), items, config);
         break;
       default:
         await Search(queryArgs(query), items, config);
@@ -27,5 +32,5 @@ export default async function Workflow(query: string) {
   });
   db.close();
 
-  return JSON.stringify({ items });
+  return JSON.stringify({ items: uniq(items) });
 }
