@@ -6,6 +6,7 @@ import { mapCacheItemToItem } from "./helpers/mapping.ts";
 import { hasCustomSrcPath } from "./helpers/url.ts";
 import { updateAvailableItem } from "./helpers/updateAvailable.ts";
 import { QueryArgs } from "./helpers/query.ts";
+import { capitalize } from "./helpers/utils.ts";
 
 export default function Setting(
   queryArgs: QueryArgs,
@@ -23,7 +24,7 @@ export default function Setting(
     await Promise.all([
       updateAvailableItem(builder, config),
       isCache ? cacheItems() : results(),
-      hasCustomSrcPath() ? builder.addItem(openSrcItem()) : null,
+      hasCustomSrcPath() ? builder.addItem(openSrcItem) : null,
     ]);
 
     return fallback();
@@ -32,8 +33,9 @@ export default function Setting(
   const cacheItems = () => {
     const items = _internals.fetchCacheItems(config);
 
-    const cmd = {
-      title: `${prefix} ${queryArgs.action} all data`,
+    const cmd: BuildItem = {
+      matchStr: `${prefix} ${queryArgs.action} all data`,
+      title: `${capitalize(queryArgs.action)} all data`,
       subtitle: "Deletes the whole cache (forces fresh data to be fetched)",
       arg: "###cache_delete###",
       icon: "delete",
@@ -47,46 +49,52 @@ export default function Setting(
     ]);
   };
 
-  const fallback = () => builder.addItem(helpItem());
+  const fallback = () => builder.addItem(helpItem);
 
-  const helpItem = (): BuildItem => ({
-    title: `${prefix} help`,
+  const helpItem: BuildItem = {
+    matchStr: `${prefix} help`,
+    title: "Help",
     subtitle: "View the README",
     arg: `${config.baseUrl}/whomwah/alfred-github-workflow/blob/main/README.md`,
     icon: "help",
     skipUID: true,
     skipMatch: true,
-  });
+  };
 
-  const openSrcItem = () => ({
-    title: `${prefix} src`,
+  const openSrcItem: BuildItem = {
+    matchStr: `${prefix} source`,
+    title: "Source folder",
     subtitle: "Open workflow src folder",
     arg: "###workflow_open###",
     icon: "book",
-  });
+  };
 
   const results = () => {
-    const cmds = [
+    const cmds: BuildItem[] = [
       {
-        title: `${prefix} logout`,
+        matchStr: `${prefix} logout`,
+        title: "Logout",
         subtitle: "Log out this workflow",
         arg: `###logout###`,
         icon: "logout",
       },
       {
-        title: `${prefix} delete database`,
+        matchStr: `${prefix} delete database`,
+        title: "Delete database",
         subtitle: "Delete ALL data (includes login, config and cache)",
         arg: "###database_delete###",
         icon: "delete",
       },
       {
-        title: `${prefix} clear`,
+        matchStr: `${prefix} clear `,
+        title: "Clear",
         subtitle: "Clear local cache data",
         icon: "delete",
         valid: false,
       },
       {
-        title: `${prefix} check`,
+        matchStr: `${prefix} check`,
+        title: "Check",
         subtitle: "Check for an update to the workflow",
         arg: `###update_available###`,
         icon: "refresh",

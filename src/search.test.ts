@@ -26,14 +26,16 @@ Deno.test("When we have an empty access token", async (t) => {
 
     assertEquals(items.length, 2);
 
-    assertEquals(items[0].title, "> login");
+    assertEquals(items[0].title, "Login");
+    assertEquals(items[0].autocomplete, "> login");
     assertEquals(
       items[0].arg,
       "###login###https://github.com/login/oauth/authorize?client_id=869cbedd6ed52af80986&scope=repo&state=robotsonghalfredworkflow",
     );
     assertEquals(items[0].icon, { path: "./icons/login.png" });
 
-    assertEquals(items[1].title, "> login <access_token>");
+    assertEquals(items[1].title, "Login <access_token>");
+    assertEquals(items[1].autocomplete, "> login ");
     assertEquals(items[1].arg, "###login_with_token###<access_token>");
     assertEquals(items[1].icon, { path: "./icons/login.png" });
   });
@@ -46,7 +48,8 @@ Deno.test("When we have an empty access token", async (t) => {
 
     assertEquals(items.length, 1);
 
-    assertEquals(items[0].title, "> login abc123");
+    assertEquals(items[0].title, "Login abc123");
+    assertEquals(items[0].autocomplete, "> login ");
     assertEquals(items[0].arg, "###login_with_token###abc123");
     assertEquals(items[0].icon, { path: "./icons/login.png" });
   });
@@ -85,11 +88,13 @@ Deno.test("When we have a access token", async (t) => {
       assertEquals(items.length, 3);
 
       assertEquals(items[0].title, "whomwah/rqrcode");
+      assertEquals(items[0].autocomplete, "whomwah/rqrcode ");
       assertEquals(items[0].subtitle, "A lib for encoding QR Codes");
       assertEquals(items[0].arg, "http://rqrcode.com");
       assertEquals(items[0].icon, { path: "./icons/repos.png" });
 
       assertEquals(items[1].title, "whomwah/rqrcode_core");
+      assertEquals(items[1].autocomplete, "whomwah/rqrcode_core ");
       assertEquals(items[1].subtitle, "A core lib for encoding QR Codes");
       assertEquals(items[1].arg, "http://rqrcode-core.com");
       assertEquals(items[1].icon, { path: "./icons/private-repo.png" });

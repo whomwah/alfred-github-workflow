@@ -1,7 +1,9 @@
 import { toIMF } from "../../deps.ts";
+import { BuildItem } from "./builder.ts";
 import { CacheItem } from "./cache.ts";
 import { GhRepo, GHRoute, GhUser } from "./github.ts";
 import { QueryArgs } from "./query.ts";
+import { capitalize } from "./utils.ts";
 
 export function mapUserToItem(user: GhUser) {
   const prefix = "@";
@@ -25,13 +27,17 @@ export function mapRepoToItem(repo: GhRepo) {
   };
 }
 
-export function mapCacheItemToItem(item: CacheItem, queryArgs: QueryArgs) {
+export function mapCacheItemToItem(
+  item: CacheItem,
+  queryArgs: QueryArgs,
+): BuildItem {
   const url = new URL(item.url);
   const label = GHRoute[url.pathname as keyof typeof GHRoute];
   const date = new Date(item.timestamp);
 
   return {
-    title: `${queryArgs.prefix} ${queryArgs.action} ${label}`,
+    matchStr: `${queryArgs.prefix} ${queryArgs.action} ${label}`,
+    title: `${capitalize(queryArgs.action)} ${label}`,
     subtitle: `last checked: ${toIMF(date)}`,
     arg: `###refresh_cache###${url.pathname}`,
     icon: "refresh",
