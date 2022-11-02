@@ -5,6 +5,7 @@ import User from "./user.ts";
 import Mine from "./mine.ts";
 import Search from "./search.ts";
 import { queryArgs } from "./helpers/query.ts";
+import { uniq } from "./helpers/utils.ts";
 
 export default async function Workflow(query: string) {
   const items: Alfred.Item[] = [];
@@ -27,5 +28,5 @@ export default async function Workflow(query: string) {
   });
   db.close();
 
-  return JSON.stringify({ items });
+  return JSON.stringify({ items: uniq(items) });
 }
