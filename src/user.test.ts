@@ -57,8 +57,11 @@ Deno.test("When we have a access token", async (t) => {
       assertEquals(items[0].arg, "http://foo.com");
       assertEquals(items[0].icon, { path: "./icons/user.png" });
 
-      assertEquals(items[1].title, "Search Github for '@whomwah'");
-      assertEquals(items[1].arg, "https://github.com/search?q=@whomwah");
+      assertEquals(items[1].title, "Search Github for 'whomwah'");
+      assertEquals(
+        items[1].arg,
+        "https://github.com/search?q=whomwah&type=users",
+      );
       assertEquals(items[1].icon, { path: "./icon.png" });
       assertEquals(items[1].valid, true);
     } finally {
@@ -88,7 +91,7 @@ Deno.test("When we have a access token", async (t) => {
       const args = queryArgs(query, "@");
       await User(args, items, config);
 
-      assertEquals(items.length, 3);
+      assertEquals(items.length, 2);
 
       assertEquals(items[0].title, "@whomwah");
       assertEquals(items[0].arg, "http://foo.com");
@@ -97,11 +100,6 @@ Deno.test("When we have a access token", async (t) => {
       assertEquals(items[1].title, "@hawmohw");
       assertEquals(items[1].arg, "http://bar.com");
       assertEquals(items[1].icon, { path: "./icons/user.png" });
-
-      assertEquals(items[2].title, "Search Github for '@'");
-      assertEquals(items[2].arg, "https://github.com/search?q=@");
-      assertEquals(items[2].icon, { path: "./icon.png" });
-      assertEquals(items[2].valid, true);
     } finally {
       userFetch.restore();
     }
@@ -143,8 +141,11 @@ Deno.test("When we have a access token", async (t) => {
       assertEquals(items[3].arg, "https://gist.github.com/whomwah");
       assertEquals(items[3].icon, { path: "./icons/gists.png" });
 
-      assertEquals(items[4].title, "Search Github for '@whomwah '");
-      assertEquals(items[4].arg, "https://github.com/search?q=@whomwah ");
+      assertEquals(items[4].title, "Search Github for 'whomwah'");
+      assertEquals(
+        items[4].arg,
+        "https://github.com/search?q=whomwah&type=users",
+      );
       assertEquals(items[4].icon, { path: "./icon.png" });
     } finally {
       userFetch.restore();
@@ -166,8 +167,11 @@ Deno.test("When we have a access token", async (t) => {
       await User(args, items, config);
 
       assertEquals(items.length, 1);
-      assertEquals(items[0].title, "Search Github for '@xxxxxxxxxxx'");
-      assertEquals(items[0].arg, "https://github.com/search?q=@xxxxxxxxxxx");
+      assertEquals(items[0].title, "Search Github for 'xxxxxxxxxxx'");
+      assertEquals(
+        items[0].arg,
+        "https://github.com/search?q=xxxxxxxxxxx&type=users",
+      );
       assertEquals(items[0].icon, { path: "./icon.png" });
       assertEquals(items[0].valid, true);
     } finally {

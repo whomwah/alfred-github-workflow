@@ -1,7 +1,7 @@
 import { toIMF } from "../../deps.ts";
 import { BuildItem } from "./builder.ts";
 import { CacheItem } from "./cache.ts";
-import { GhRepo, GHRoute, GhUser } from "./github.ts";
+import { GhGist, GhRepo, GHRoute, GhUser } from "./github.ts";
 import { QueryArgs } from "./query.ts";
 import { capitalize } from "./utils.ts";
 
@@ -24,6 +24,23 @@ export function mapRepoToItem(repo: GhRepo) {
     icon: repo.private ? "private-repo" : "repos",
     autocomplete: `${repo.full_name} `,
     arg: repo.html_url,
+  };
+}
+
+export function mapGistToItem(gist: GhGist): BuildItem {
+  const sanitizedTitle = gist.description
+    .replace(/#\S+[ \t]*/g, "")
+    .replace(/[\[|\]]/g, "")
+    .trim();
+  const lastUpdated = new Date(gist.updated_at);
+
+  return {
+    matchStr: `gists ${gist.description}`,
+    title: sanitizedTitle === "" ? `No name! ${gist.id}` : sanitizedTitle,
+    autocomplete: false,
+    subtitle: `Last updated: ${toIMF(lastUpdated)}`,
+    icon: gist.public ? "gists" : "gists-private",
+    arg: gist.html_url,
   };
 }
 

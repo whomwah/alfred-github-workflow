@@ -28,8 +28,8 @@ Deno.test("When we have an empty token", async (t) => {
   });
 });
 
-Deno.test("When we have an empty token", async (t) => {
-  await t.step("it should show options that user", async () => {
+Deno.test("When we have a token", async (t) => {
+  await t.step("it should show options for that user", async () => {
     config.token = "abcdefg123444";
     const user = { login: "whomwah" } as GhUser;
     const userFetch = stub(_internals, "fetchUser", resolvesNext([[user]]));
@@ -40,7 +40,7 @@ Deno.test("When we have an empty token", async (t) => {
       const args = queryArgs(query, "my");
       await Mine(args, items, config);
 
-      assertEquals(items.length, 12);
+      assertEquals(items.length, 11);
 
       assertEquals(items[0].title, "Pull requests");
       assertEquals(items[0].autocomplete, "my pull requests");
@@ -107,11 +107,6 @@ Deno.test("When we have an empty token", async (t) => {
       assertEquals(items[10].subtitle, "View and manage your settings");
       assertEquals(items[10].arg, "https://github.com/settings/profile");
       assertEquals(items[10].icon, { path: "./icons/settings.png" });
-
-      assertEquals(items[11].title, "Search Github for 'my'");
-      assertEquals(items[11].arg, "https://github.com/search?q=my");
-      assertEquals(items[11].icon, { path: "./icon.png" });
-      assertEquals(items[11].valid, true);
     } finally {
       userFetch.restore();
     }
@@ -136,10 +131,10 @@ Deno.test("When we have an empty token", async (t) => {
       assertEquals(items[0].arg, "https://github.com/notifications");
       assertEquals(items[0].icon, { path: "./icons/notifications.png" });
 
-      assertEquals(items[1].title, "Search Github for 'my notifications'");
+      assertEquals(items[1].title, "Search Github for 'notifications'");
       assertEquals(
         items[1].arg,
-        "https://github.com/search?q=my notifications",
+        "https://github.com/search?q=notifications",
       );
       assertEquals(items[1].icon, { path: "./icon.png" });
       assertEquals(items[1].valid, true);
@@ -162,11 +157,11 @@ Deno.test("When we have an empty token", async (t) => {
       assertEquals(items.length, 1);
       assertEquals(
         items[0].title,
-        "Search Github for 'my zzzzzzzzzzzzzzzzzzzzz'",
+        "Search Github for 'zzzzzzzzzzzzzzzzzzzzz'",
       );
       assertEquals(
         items[0].arg,
-        "https://github.com/search?q=my zzzzzzzzzzzzzzzzzzzzz",
+        "https://github.com/search?q=zzzzzzzzzzzzzzzzzzzzz",
       );
       assertEquals(items[0].icon, { path: "./icon.png" });
       assertEquals(items[0].valid, true);

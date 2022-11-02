@@ -66,15 +66,19 @@ export function searchGithub(
   builder: BuilderType,
   queryArgs: QueryArgs,
   config: Config,
+  type?: string,
 ) {
+  const searchString = queryArgs.lastPart;
+  const typeQuery = type ? `&type=${type}` : "";
   const item: BuildItem = {
-    title: `Search Github for '${queryArgs.query}'`,
+    title: `Search Github for '${searchString}'`,
     autocomplete: false,
-    arg: `${config.baseUrl}/search?q=${queryArgs.query}`,
+    arg: `${config.baseUrl}/search?q=${searchString}${typeQuery}`,
     skipUID: true,
     skipMatch: true,
   };
 
+  if (searchString === "") return;
   return builder.addItem(item);
 }
 
@@ -116,4 +120,6 @@ function extractLoginToken(parts: string[]) {
   }
 }
 
-const matches = (title: string, action: string) => fuzzyMatch(title, action);
+function matches(title: string, action: string) {
+  return fuzzyMatch(title.toLowerCase(), action);
+}

@@ -9,6 +9,6 @@ const STATE = "robotsonghalfredworkflow";
 const GITHUB_OAUTH_URL = "https://github.com/login/oauth/authorize";
 const GITHUB_CLIENT_ID = "869cbedd6ed52af80986";
 const OAUTH_URL =
-  `${GITHUB_OAUTH_URL}?client_id=${GITHUB_CLIENT_ID}&scope=repo&state=${STATE}`;
+  `${GITHUB_OAUTH_URL}?client_id=${GITHUB_CLIENT_ID}&scope=repo,gist&state=${STATE}`;
 
 export { DATABASE, DB_DIR, OAUTH_URL };
