@@ -17,3 +17,9 @@ export const updateFrequency = (
 ) => {
   return updateFrequencyOptions[freq];
 };
+
+export const cacheUpdateFrequency = (
+  freq: string = Deno.env.get("cacheCheckFrequency") || "weekly",
+) => {
+  return updateFrequencyOptions[freq];
+};

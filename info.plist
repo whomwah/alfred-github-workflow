@@ -401,6 +401,40 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 			<key>variable</key>
 			<string>updateFrequency</string>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>monthly</string>
+				<key>pairs</key>
+				<array>
+					<array>
+						<string>Daily</string>
+						<string>daily</string>
+					</array>
+					<array>
+						<string>Weekly</string>
+						<string>weekly</string>
+					</array>
+					<array>
+						<string>Monthly</string>
+						<string>monthly</string>
+					</array>
+					<array>
+						<string>Yearly</string>
+						<string>yearly</string>
+					</array>
+				</array>
+			</dict>
+			<key>description</key>
+			<string>How often should we clear the cache</string>
+			<key>label</key>
+			<string>Cache Update frequency</string>
+			<key>type</key>
+			<string>popupbutton</string>
+			<key>variable</key>
+			<string>cacheCheckFrequency</string>
+		</dict>
 	</array>
 	<key>variables</key>
 	<dict>

@@ -1,8 +1,10 @@
 import { DB } from "../../deps.ts";
 import { Config, removeConfig } from "./config.ts";
+import { cacheUpdateFrequency, TWENTY_FOUR_HOURS } from "./frequency.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
 
-const INVALIDATE_CACHE_DATE = new Date().getTime() - 1000 * 60 * 60 * 24 * 14; // 14 days
+const INVALIDATE_CACHE_DATE = new Date().getTime() -
+  TWENTY_FOUR_HOURS * cacheUpdateFrequency();
 
 /**
  * [:url, :timestamp, :content, :parent]
