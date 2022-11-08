@@ -78,7 +78,7 @@ You will first need to install `deno` as mentioned earlier in this README.
 
 ### Tests
 
-`deno test --allow-env`
+`deno task test`
 
 ### Formatting
 
