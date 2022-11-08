@@ -5,6 +5,7 @@ on: [push]
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
     strategy:
       matrix:
         os: [macos-latest]
@@ -23,10 +24,10 @@ jobs:
           deno-version: v1.x
 
       - name: Verify formatting
-      - run: deno fmt --check
+        run: deno fmt --check
 
       - name: Run linter
-      - run: deno lint
+        run: deno lint
 
       - name: Run tests
-      - run: deno test --allow-env
+        run: deno test --allow-env
