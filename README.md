@@ -69,7 +69,8 @@ gh ...
 You find out the latest version by looking at the
 [release section](https://github.com/whomwah/alfred-github-workflow/releases) of
 the repo. The workflow will also let you know if there is an update available.
-This can be disable via the workflow configuration area.
+This can be disabled via the workflow configuration area along with other
+configurable options.
 
 ## Development
 
