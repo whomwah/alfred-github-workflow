@@ -1,24 +1,10 @@
 import { lte, validVersion } from "../../deps.ts";
 import { BuilderType, BuildItem } from "./builder.ts";
 import { Config, storeConfig } from "./config.ts";
+import { TWENTY_FOUR_HOURS, updateFrequency } from "./frequency.ts";
 import { fetchData, GhRelease } from "./github.ts";
 
-type FrequencyOptions = {
-  [index: string]: number;
-};
-
 const workflowRepo = "whomwah/alfred-github-workflow";
-const updateFrequency: FrequencyOptions = {
-  daily: 1,
-  weekly: 7,
-  monthly: 30,
-  yearly: 365,
-};
-
-const frequency = () => {
-  const freqEnv = Deno.env.get("updateFrequency") || "weekly";
-  return updateFrequency[freqEnv];
-};
 
 export async function updateAvailableItem(
   builder: BuilderType,
@@ -58,7 +44,7 @@ async function fetchAndStore(config: Config, now: number) {
 }
 
 async function cacheRelease(now: number, config: Config) {
-  const invalidateCacheDate = now - 1000 * 60 * 60 * 24 * frequency();
+  const invalidateCacheDate = now - TWENTY_FOUR_HOURS * updateFrequency();
   const lastChecked = config.latestVersionLastChecked;
 
   if (lastChecked < invalidateCacheDate) {

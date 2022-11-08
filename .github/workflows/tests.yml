@@ -5,6 +5,7 @@ on: [push]
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
     strategy:
       matrix:
         os: [macos-latest]
@@ -20,15 +21,13 @@ jobs:
       - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v1.1.1
         with:
-          deno-version: v1.x # Run with latest stable Deno.
+          deno-version: v1.x
 
-      # Check if the code is formatted according to Deno's default
-      # formatting conventions.
-      - run: deno fmt --check
+      - name: Verify formatting
+        run: deno fmt --check
 
-      # Scan the code for syntax errors and style issues. If
-      # you want to use a custom linter configuration you can add a configuration file with --config <myconfig>
-      - run: deno lint
+      - name: Run linter
+        run: deno lint
 
-      # Run all test files in the repository
-      - run: deno test --allow-env
+      - name: Run tests
+        run: deno test --allow-env
