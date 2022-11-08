@@ -279,18 +279,12 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
-# [1.7.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.6.3...v1.7.0) (2022-11-02)
-
-
-### Bug Fixes
-
-* remove dupes from items list ([ea71bea](https://github.com/whomwah/alfred-github-workflow/commit/ea71beaf90823c710576e578d7521285bf0b9a5a))
+# [1.8.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.7.0...v1.8.0) (2022-11-08)
 
 
 ### Features
 
-* Add new gists command for viewing your gists ([1df1f10](https://github.com/whomwah/alfred-github-workflow/commit/1df1f10bf96124f55022475089bd76526d69f3ad))
-* result titles have been cleaned up ([a271cb3](https://github.com/whomwah/alfred-github-workflow/commit/a271cb38cbbdba06bedc572fe272dbeff55bf15d))
+* Add new config for length of time to cache results ([a63a7ed](https://github.com/whomwah/alfred-github-workflow/commit/a63a7edfa69499d3f5f70e2ac8212bc772ede8af))
 
 
 
@@ -442,7 +436,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.7.0</string>
+	<string>1.8.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
