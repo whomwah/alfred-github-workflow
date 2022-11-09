@@ -1,4 +1,4 @@
-name: Deno CI
+name: Package
 
 on:
   workflow_run:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   release:
-    if: github.ref_name == 'main'
+    if: ${{ github.ref_name == 'main' && github.event.workflow_run.conclusion == 'success' }}
     runs-on: macos-latest
     steps:
       - name: Checkout
