@@ -1,10 +1,6 @@
 import { DB } from "../../deps.ts";
 import { Config, removeConfig } from "./config.ts";
-import { cacheUpdateFrequency, TWENTY_FOUR_HOURS } from "./frequency.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
-
-const INVALIDATE_CACHE_DATE = new Date().getTime() -
-  TWENTY_FOUR_HOURS * cacheUpdateFrequency();
 
 /**
  * [:url, :timestamp, :content, :parent]
@@ -16,10 +12,10 @@ export interface CacheItem {
   timestamp: number;
 }
 
-export function cleanCache(db: DB) {
+export function cleanCache(db: DB, invalidateCacheDate: number) {
   try {
     db.query("DELETE FROM request_cache WHERE timestamp < :time", {
-      time: INVALIDATE_CACHE_DATE,
+      time: invalidateCacheDate,
     });
   } catch (err) {
     console.error(err);
@@ -116,11 +112,11 @@ async function recursiveDbCacheFetch<T>(
     const data = JSON.parse(row.content);
 
     // This is the initial request and the data looks stale
-    if (initialPage && lastChecked < INVALIDATE_CACHE_DATE) {
+    if (initialPage && lastChecked < config.invalidateCacheDate) {
       console.warn("We should fetch some new data! as this is OLD");
 
       // clear any stale data
-      cleanCache(config.db);
+      cleanCache(config.db, config.invalidateCacheDate);
 
       // fetch fresh data from the API
       await apiFetch();

@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.154.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.160.0/testing/asserts.ts";
 import { updateFrequency } from "./frequency.ts";
 
 Deno.test("#updateFrequency", async (t) => {

@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.154.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.160.0/testing/asserts.ts";
 import { createMd5Hash } from "./md5.ts";
 
 Deno.test("#createMd5Hash", async () => {

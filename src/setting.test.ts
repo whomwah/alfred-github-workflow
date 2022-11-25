@@ -1,8 +1,8 @@
-import { assertEquals } from "https://deno.land/std@0.156.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.160.0/testing/asserts.ts";
 import {
   returnsNext,
   stub,
-} from "https://deno.land/std@0.156.0/testing/mock.ts";
+} from "https://deno.land/std@0.160.0/testing/mock.ts";
 import { DB } from "../deps.ts";
 import { CacheItem } from "./helpers/cache.ts";
 import { Config } from "./helpers/config.ts";

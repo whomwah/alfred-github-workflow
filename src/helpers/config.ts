@@ -1,29 +1,42 @@
 import { DB } from "../../deps.ts";
+import {
+  cacheUpdateFrequency,
+  TWENTY_FOUR_HOURS,
+  updateFrequency,
+} from "./frequency.ts";
 
 export interface Config {
+  db: DB;
+  // Github
   baseApiUrl: string;
   baseGistUrl: string;
   baseUrl: string;
-  checkForUpdates: boolean;
-  currentVersion: string;
-  db: DB;
-  latestVersion: string;
-  latestVersionLastChecked: number;
   perPage: number;
   token?: string;
+  // Workflow updates
+  currentVersion: string;
+  latestVersion: string;
+  latestVersionLastChecked: number;
+  invalidateCacheDate: number;
+  // Project settings
+  checkForUpdates: boolean;
+  updateFrequency: number;
 }
 
 export function prefetchConfig(db: DB) {
   const config: Config = {
-    checkForUpdates: !!parseInt(Deno.env.get("checkForUpdates") || "1"),
-    currentVersion: Deno.env.get("alfred_workflow_version") || "",
+    db,
     baseUrl: "https://github.com",
     baseApiUrl: "https://api.github.com",
     baseGistUrl: "https://gist.github.com",
     perPage: 100,
+    checkForUpdates: !!parseInt(Deno.env.get("checkForUpdates") || "1"),
+    updateFrequency: updateFrequency(),
+    currentVersion: Deno.env.get("alfred_workflow_version") || "",
     latestVersion: "",
     latestVersionLastChecked: 0,
-    db,
+    invalidateCacheDate: new Date().getTime() -
+      TWENTY_FOUR_HOURS * cacheUpdateFrequency(),
   };
 
   for (const [key, value] of db.query("SELECT key, value FROM config")) {
