@@ -25,7 +25,7 @@ above.
 > Node.js.
 
 Once installed you can
-[download the latest version](https://github.com/whomwah/alfred-github-workflow/releases)
+[download the latest version](https://github.com/whomwah/alfred-github-workflow/releases/latest)
 and double click the `.workflow` file to open and install or update.
 
 ## Usage
