@@ -2,6 +2,7 @@
 
 ![](https://github.com/whomwah/alfred-github-workflow/actions/workflows/tests.yml/badge.svg)
 [![semantic-release: deno](https://img.shields.io/badge/semantic--release-deno-blue?logo=deno)](https://github.com/semantic-release/semantic-release)
+[![release](https://img.shields.io/github/v/release/whomwah/alfred-github-workflow?&sort=semver)](https://github.com/whomwah/alfred-github-workflow/releases/latest)
 
 This workflow is inspired by
 [Alfred workflow](https://github.com/gharlan/alfred-github-workflow) by
