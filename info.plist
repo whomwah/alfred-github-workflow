@@ -307,12 +307,12 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
-# [1.8.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.7.0...v1.8.0) (2022-11-08)
+# [1.9.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.8.0...v1.9.0) (2022-12-13)
 
 
 ### Features
 
-* Add new config for length of time to cache results ([a63a7ed](https://github.com/whomwah/alfred-github-workflow/commit/a63a7edfa69499d3f5f70e2ac8212bc772ede8af))
+* Found new solution for auth that does not require a server be started ([3a824bd](https://github.com/whomwah/alfred-github-workflow/commit/3a824bdfeb0c07226b866509c93de7dbaab3bbbb))
 
 
 
@@ -475,7 +475,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.8.0</string>
+	<string>1.9.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
