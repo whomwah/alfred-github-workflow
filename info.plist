@@ -23,6 +23,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>44FE5B75-00E4-438E-AD4A-DD909B838A4C</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>82B15CD5-4C50-4DE4-A0FD-6534151A56B0</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>4717FF19-F3EA-437A-9420-23401B9E626B</key>
 		<array>
 			<dict>
@@ -88,6 +101,55 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>2</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>gh</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Octocat initialising...please wait whilst we prefetch data</string>
+				<key>script</key>
+				<string>$(which deno) run --allow-env --allow-write --allow-read --allow-net ${INIT_FILE} filter $argv[1]</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Search or type a command</string>
+				<key>title</key>
+				<string>gh...</string>
+				<key>type</key>
+				<integer>5</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>D826D6D1-5C1A-45D5-8933-7B0BA272293A</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
@@ -143,55 +205,6 @@ echo "You are running the latest version (${alfred_workflow_version})"</string>
 			<string>30C17AB4-36EF-4398-ADDF-B795D814F5F7</string>
 			<key>version</key>
 			<integer>2</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>2</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>1</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>keyword</key>
-				<string>gh</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<false/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Octocat initialising...please wait whilst we prefetch data</string>
-				<key>script</key>
-				<string>$(which deno) run --allow-env --allow-write --allow-read --allow-net ${INIT_FILE} filter $argv[1]</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string>Search or type a command</string>
-				<key>title</key>
-				<string>gh...</string>
-				<key>type</key>
-				<integer>5</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>D826D6D1-5C1A-45D5-8933-7B0BA272293A</string>
-			<key>version</key>
-			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -269,6 +282,21 @@ echo "You are running the latest version (${alfred_workflow_version})"</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>availableviaurlhandler</key>
+				<true/>
+				<key>triggerid</key>
+				<string>auth</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.external</string>
+			<key>uid</key>
+			<string>44FE5B75-00E4-438E-AD4A-DD909B838A4C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string># Github Workflow
@@ -312,6 +340,17 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 			<key>ypos</key>
 			<real>130</real>
 		</dict>
+		<key>44FE5B75-00E4-438E-AD4A-DD909B838A4C</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>6</integer>
+			<key>note</key>
+			<string>Entry point for your Github Auth Token</string>
+			<key>xpos</key>
+			<real>50</real>
+			<key>ypos</key>
+			<real>450</real>
+		</dict>
 		<key>4717FF19-F3EA-437A-9420-23401B9E626B</key>
 		<dict>
 			<key>note</key>
@@ -335,9 +374,9 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 			<key>note</key>
 			<string>Main script that takes input and returns the items you see</string>
 			<key>xpos</key>
-			<real>90</real>
+			<real>40</real>
 			<key>ypos</key>
-			<real>145</real>
+			<real>100</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>

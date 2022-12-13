@@ -30,13 +30,13 @@ Deno.test("When we have an empty access token", async (t) => {
     assertEquals(items[0].autocomplete, "> login");
     assertEquals(
       items[0].arg,
-      "###login###https://github.com/login/oauth/authorize?client_id=869cbedd6ed52af80986&scope=repo,gist&state=robotsonghalfredworkflow",
+      "###login###https://github.com/login/oauth/authorize?client_id=869cbedd6ed52af80986&scope=repo,gist&state=robotsonalfredworkflow",
     );
     assertEquals(items[0].icon, { path: "./icons/login.png" });
 
     assertEquals(items[1].title, "Login <access_token>");
     assertEquals(items[1].autocomplete, "> login ");
-    assertEquals(items[1].arg, "###login_with_token###<access_token>");
+    assertEquals(items[1].arg, "@@@token@@@<access_token>");
     assertEquals(items[1].icon, { path: "./icons/login.png" });
   });
 
@@ -50,7 +50,7 @@ Deno.test("When we have an empty access token", async (t) => {
 
     assertEquals(items[0].title, "Login abc123");
     assertEquals(items[0].autocomplete, "> login ");
-    assertEquals(items[0].arg, "###login_with_token###abc123");
+    assertEquals(items[0].arg, "@@@token@@@abc123");
     assertEquals(items[0].icon, { path: "./icons/login.png" });
   });
 });

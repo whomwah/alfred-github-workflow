@@ -3,7 +3,6 @@ import { removeConfig, storeConfig } from "./helpers/config.ts";
 import { dbConnect, deleteDatabase } from "./setup.ts";
 import { openPath, openUrlInBrowser } from "./helpers/url.ts";
 import { log } from "./helpers/log.ts";
-import { startServer } from "./server.ts";
 import { dirname } from "../deps.ts";
 
 export default async function Action(query: string) {
@@ -16,18 +15,23 @@ export default async function Action(query: string) {
     // We want to generate a new auth token
     case action("###login###"): {
       await openUrlInBrowser(query.replace("###login###", ""));
-      await startServer(db, (message: string) => log(message));
       break;
     }
-    // We want add our own auth token
-    case action("###login_with_token###"): {
+    // There was an issue with the token
+    case action("@@@error@@@"): {
+      const message = query.replace("@@@error@@@", "");
+      log(`Oops! There was a problem: ${message}`);
+      break;
+    }
+    // We want save our auth token
+    case action("@@@token@@@"): {
       storeConfig(
         db,
         "access_token",
-        query.replace("###login_with_token###", ""),
+        query.replace("@@@token@@@", ""),
       );
       db.close();
-      log("Added token successfully!");
+      log("Success! Your token has been saved. Enjoy this Alfred workflow.");
       break;
     }
     // We want to clear the current auth token set
