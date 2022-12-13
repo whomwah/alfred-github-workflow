@@ -100,8 +100,9 @@ export function loginCommands(queryArgs: QueryArgs, builder: BuilderType) {
       title: `Login ${token}`,
       subtitle: "Save access token",
       icon: "login",
-      arg: `###login_with_token###${token}`,
+      arg: `@@@token@@@${token}`,
       valid,
+      skipMatch: true,
     });
 
   return Promise.all(

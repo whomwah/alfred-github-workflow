@@ -34,9 +34,9 @@ and double click the `.workflow` file to open and install or update.
 By default you access the workflow via the `gh` command.
 
 The first time you use the workflow you will need an access token so the
-workflow can speak to github on your behalf. You can do this via the
+workflow can speak to Github on your behalf. You can do this via the
 `gh > login` command. Pressing enter will take you to an authorisation page on
-Github. The permissions are used only by the workflow.
+Github. The permissions are required only by the workflow. I'm not evil.
 
 There are a few top level commands and other than that you just start typing a
 `repo` or `user` you are interested in. Once you start seeing results, pressing
