@@ -307,22 +307,6 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
-# [1.10.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.9.0...v1.10.0) (2024-10-04)
-
-
-### Bug Fixes
-
-* Change Deno.run to Deno.Command ([ebf5730](https://github.com/whomwah/alfred-github-workflow/commit/ebf573024c8d2ee4e2d90df423ddcd6e98119557))
-* Fix linting issue ([e43acc7](https://github.com/whomwah/alfred-github-workflow/commit/e43acc793457a42bb7b181774a261d90178937e8))
-
-
-### Features
-
-* Update dependencies for Deno 2.0 compatibility ([7c53534](https://github.com/whomwah/alfred-github-workflow/commit/7c5353453419addbdb35f33dc92679bc26a31bf5))
-
-
-
-
 
 To view other releases visit:
 https://github.com/whomwah/alfred-github-workflow/releases</string>
