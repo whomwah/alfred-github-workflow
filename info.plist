@@ -126,7 +126,7 @@
 				<key>runningsubtext</key>
 				<string>Octocat initialising...please wait whilst we prefetch data</string>
 				<key>script</key>
-				<string>PATH="${HOME}/.deno/bin:${PATH}";$(which deno) run --allow-env --allow-write --allow-read --allow-net ${INIT_FILE} filter $argv[1]</string>
+				<string>PATH=$HOME/.deno/bin:$PATH;$(which deno) run --allow-env --allow-write --allow-read --allow-net ${INIT_FILE} filter $argv[1]</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -246,7 +246,7 @@ echo "You are running the latest version (${alfred_workflow_version})"</string>
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>PATH="${HOME}/.deno/bin:${PATH}";$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${INIT_FILE} action $argv[1]</string>
+				<string>PATH=$HOME/.deno/bin:$PATH;$(which deno) run --allow-net --allow-run --allow-env --allow-write --allow-read ${INIT_FILE} action $argv[1]</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
