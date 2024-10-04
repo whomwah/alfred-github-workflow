@@ -1,4 +1,4 @@
-import { crypto } from "../../deps.ts";
+import { crypto } from "@std/crypto";
 
 export async function createMd5Hash(data: string) {
   const md5Value = new Uint8Array(

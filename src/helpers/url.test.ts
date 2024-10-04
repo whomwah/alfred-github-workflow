@@ -5,18 +5,21 @@ import {
 } from "https://deno.land/std@0.160.0/testing/mock.ts";
 import { hasCustomSrcPath, openUrlInBrowser } from "./url.ts";
 
-const result: Deno.ProcessStatus = {
+const result = {
   success: false,
+  stderr: new Uint8Array(32),
+  stdout: new Uint8Array(32),
   code: 1,
-};
+  signal: null,
+} as Deno.CommandOutput;
 
 const status = {
-  status: () => Promise.resolve(result),
-} as Deno.Process;
+  output: () => Promise.resolve(result),
+} as Deno.Command;
 
 Deno.test("#openUrlInBrowser", async (t) => {
   await t.step("it opens valid urls", async () => {
-    const denoRun = stub(Deno, "run", returnsNext([status]));
+    const denoRun = stub(Deno, "Command", returnsNext([status]));
 
     try {
       const open = await openUrlInBrowser("http://whomwah.com");
@@ -27,7 +30,7 @@ Deno.test("#openUrlInBrowser", async (t) => {
   });
 
   await t.step("it ignores invalid urls", async () => {
-    const denoRun = stub(Deno, "run", returnsNext([status]));
+    const denoRun = stub(Deno, "Command", returnsNext([status]));
     const consoleStub = stub(console, "error");
 
     try {

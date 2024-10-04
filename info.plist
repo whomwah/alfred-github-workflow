@@ -307,12 +307,18 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
-# [1.9.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.8.0...v1.9.0) (2022-12-13)
+# [1.10.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.9.0...v1.10.0) (2024-10-04)
+
+
+### Bug Fixes
+
+* Change Deno.run to Deno.Command ([ebf5730](https://github.com/whomwah/alfred-github-workflow/commit/ebf573024c8d2ee4e2d90df423ddcd6e98119557))
+* Fix linting issue ([e43acc7](https://github.com/whomwah/alfred-github-workflow/commit/e43acc793457a42bb7b181774a261d90178937e8))
 
 
 ### Features
 
-* Found new solution for auth that does not require a server be started ([3a824bd](https://github.com/whomwah/alfred-github-workflow/commit/3a824bdfeb0c07226b866509c93de7dbaab3bbbb))
+* Update dependencies for Deno 2.0 compatibility ([7c53534](https://github.com/whomwah/alfred-github-workflow/commit/7c5353453419addbdb35f33dc92679bc26a31bf5))
 
 
 
@@ -475,7 +481,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.9.0</string>
+	<string>1.10.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>

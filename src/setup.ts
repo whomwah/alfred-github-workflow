@@ -1,4 +1,5 @@
-import { DB, emptyDir, ensureDir } from "../deps.ts";
+import { DB } from "sqlite";
+import { emptyDir, ensureDir } from "@std/fs";
 import { Config, prefetchConfig } from "./helpers/config.ts";
 import { DATABASE, DB_DIR } from "../env.ts";
 

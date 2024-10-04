@@ -10,7 +10,8 @@ function isValidHttpUrl(string: string) {
 }
 
 export async function openPath(path: string) {
-  await Deno.run({ cmd: ["open", path] }).status();
+  const command = new Deno.Command("open", { args: [path] });
+  await command.output();
 }
 
 export async function openUrlInBrowser(url: string) {
