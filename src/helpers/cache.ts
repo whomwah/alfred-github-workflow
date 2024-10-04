@@ -1,4 +1,4 @@
-import { DB } from "../../deps.ts";
+import { DB } from "sqlite";
 import { Config, removeConfig } from "./config.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
 
@@ -94,14 +94,18 @@ async function recursiveDbCacheFetch<T>(
     try {
       await fetchNewDataFromAPIandStore(config, url, results);
     } catch (err) {
-      if (err.name === "HttpError" && err.message === "Bad credentials") {
-        // clear out old stored credentials
-        removeConfig(config.db, "access_token");
+      if (err instanceof Error) {
+        if (err.name === "HttpError" && err.message === "Bad credentials") {
+          // clear out old stored credentials
+          removeConfig(config.db, "access_token");
 
-        console.error("recursiveDbCacheFetchError:", {
-          name: err.name,
-          message: err.message,
-        });
+          console.error("recursiveDbCacheFetchError:", {
+            name: err.name,
+            message: err.message,
+          });
+        }
+      } else {
+        console.error("Unknown error", err);
       }
     }
   };

@@ -1,4 +1,4 @@
-import { lte, validVersion } from "../../deps.ts";
+import { lessOrEqual, parse } from "@std/semver";
 import { BuilderType, BuildItem } from "./builder.ts";
 import { Config, storeConfig } from "./config.ts";
 import { TWENTY_FOUR_HOURS, updateFrequency } from "./frequency.ts";
@@ -15,8 +15,10 @@ export async function updateAvailableItem(
 
   await _internals.cacheRelease(now, config);
 
-  const isValid = validVersion(config.latestVersion) &&
-    lte(config.latestVersion, config.currentVersion);
+  const isValid = lessOrEqual(
+    parse(config.latestVersion),
+    parse(config.currentVersion),
+  );
   if (isValid) return null;
 
   const item: BuildItem = {

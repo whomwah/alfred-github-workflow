@@ -4,7 +4,7 @@ import {
   stub,
 } from "https://deno.land/std@0.160.0/testing/mock.ts";
 import { FakeTime } from "https://deno.land/std@0.160.0/testing/time.ts";
-import { DB } from "../deps.ts";
+import { DB } from "sqlite";
 import { Config } from "./helpers/config.ts";
 import { GhGist } from "./helpers/github.ts";
 import { queryArgs } from "./helpers/query.ts";

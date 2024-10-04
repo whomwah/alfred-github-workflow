@@ -1,4 +1,4 @@
-import { DB } from "../../deps.ts";
+import { DB } from "sqlite";
 import {
   cacheUpdateFrequency,
   TWENTY_FOUR_HOURS,

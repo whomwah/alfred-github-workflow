@@ -79,7 +79,7 @@ You will first need to install `deno` as mentioned earlier in this README.
 
 ### Tests
 
-`deno task test`
+`deno run test`
 
 ### Formatting
 
