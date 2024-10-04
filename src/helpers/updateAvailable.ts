@@ -15,11 +15,15 @@ export async function updateAvailableItem(
 
   await _internals.cacheRelease(now, config);
 
-  const isValid = lessOrEqual(
-    parse(config.latestVersion),
-    parse(config.currentVersion),
-  );
-  if (isValid) return null;
+  try {
+    const isValid = lessOrEqual(
+      parse(config.latestVersion),
+      parse(config.currentVersion),
+    );
+    if (isValid) return null;
+  } catch (_) {
+    return null;
+  }
 
   const item: BuildItem = {
     title: `Update available (${config.latestVersion})`,
