@@ -1,4 +1,4 @@
-import { DB } from "../../deps.ts";
+import { DB } from "sqlite";
 import { Config, removeConfig } from "./config.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
 

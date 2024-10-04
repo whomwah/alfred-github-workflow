@@ -1,4 +1,12 @@
 {
+  "imports": {
+    "@std/crypto": "jsr:@std/crypto",
+    "@std/fs": "jsr:@std/fs",
+    "@std/semver": "jsr:@std/semver",
+    "@std/path": "jsr:@std/path",
+    "@std/streams": "jsr:@std/streams",
+    "sqlite": "https://deno.land/x/sqlite@v3.5.0/mod.ts"
+  },
   "tasks": {
     "test": "deno test --allow-env"
   }

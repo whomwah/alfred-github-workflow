@@ -3,7 +3,7 @@ import {
   returnsNext,
   stub,
 } from "https://deno.land/std@0.160.0/testing/mock.ts";
-import { DB } from "../deps.ts";
+import { DB } from "sqlite";
 import { CacheItem } from "./helpers/cache.ts";
 import { Config } from "./helpers/config.ts";
 import { queryArgs } from "./helpers/query.ts";

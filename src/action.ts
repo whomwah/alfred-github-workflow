@@ -1,9 +1,9 @@
+import { dirname } from "@std/path";
 import { deleteCache } from "./helpers/cache.ts";
 import { removeConfig, storeConfig } from "./helpers/config.ts";
 import { dbConnect, deleteDatabase } from "./setup.ts";
 import { openPath, openUrlInBrowser } from "./helpers/url.ts";
 import { log } from "./helpers/log.ts";
-import { dirname } from "../deps.ts";
 
 export default async function Action(query: string) {
   // In this case its up to the function being passed the
@@ -25,11 +25,7 @@ export default async function Action(query: string) {
     }
     // We want save our auth token
     case action("@@@token@@@"): {
-      storeConfig(
-        db,
-        "access_token",
-        query.replace("@@@token@@@", ""),
-      );
+      storeConfig(db, "access_token", query.replace("@@@token@@@", ""));
       db.close();
       log("Success! Your token has been saved. Enjoy this Alfred workflow.");
       break;

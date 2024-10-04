@@ -1,4 +1,3 @@
-import { toIMF } from "../../deps.ts";
 import { BuildItem } from "./builder.ts";
 import { CacheItem } from "./cache.ts";
 import { GhGist, GhRepo, GHRoute, GhUser } from "./github.ts";
@@ -38,7 +37,7 @@ export function mapGistToItem(gist: GhGist): BuildItem {
     matchStr: `gists ${gist.description}`,
     title: sanitizedTitle === "" ? `No name! ${gist.id}` : sanitizedTitle,
     autocomplete: false,
-    subtitle: `Last updated: ${toIMF(lastUpdated)}`,
+    subtitle: `Last updated: ${lastUpdated.toUTCString()}`,
     icon: gist.public ? "gists" : "gists-private",
     arg: gist.html_url,
   };
@@ -55,7 +54,7 @@ export function mapCacheItemToItem(
   return {
     matchStr: `${queryArgs.prefix} ${queryArgs.action} ${label}`,
     title: `${capitalize(queryArgs.action)} ${label}`,
-    subtitle: `last checked: ${toIMF(date)}`,
+    subtitle: `last checked: ${date.toString()}`,
     arg: `###refresh_cache###${url.pathname}`,
     icon: "refresh",
   };
