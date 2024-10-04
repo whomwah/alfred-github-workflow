@@ -307,6 +307,7 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
+UPDATING TO: 1.10.1
 
 To view other releases visit:
 https://github.com/whomwah/alfred-github-workflow/releases</string>
@@ -465,7 +466,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.10.0</string>
+	<string>1.10.1</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
