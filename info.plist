@@ -307,7 +307,17 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
-UPDATING TO: 1.10.1
+# [1.11.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.10.1...v1.11.0) (2024-10-09)
+
+
+### Bug Fixes
+
+* Add fix for build script and characters that could cause issues ([1f49806](https://github.com/whomwah/alfred-github-workflow/commit/1f498069c0a600b3fead793cb658bedc0ad42267))
+
+
+### Features
+
+* upgrade SQlite to use Deno recommended ([0b09e97](https://github.com/whomwah/alfred-github-workflow/commit/0b09e974aa0124ac0fa723caf60485f2085aa263))
 
 To view other releases visit:
 https://github.com/whomwah/alfred-github-workflow/releases</string>
@@ -466,7 +476,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.10.1</string>
+	<string>1.11.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
