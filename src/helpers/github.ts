@@ -174,7 +174,7 @@ export async function fetchNewDataFromAPIandStore<T>(
       url,
       new Date().getTime(),
       JSON.stringify(data),
-      urlToStore,
+      urlToStore || null,
     ]);
 
     results.push(...(Array.isArray(data) ? data : [data]));

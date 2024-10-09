@@ -5,7 +5,7 @@
     "@std/semver": "jsr:@std/semver",
     "@std/path": "jsr:@std/path",
     "@std/io/write-all": "jsr:@std/io/write-all",
-    "sqlite": "https://deno.land/x/sqlite@v3.5.0/mod.ts"
+    "sqlite": "jsr:@db/sqlite"
   },
   "tasks": {
     "test": "deno test --allow-env"

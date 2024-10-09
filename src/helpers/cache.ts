@@ -1,20 +1,20 @@
-import { DB } from "sqlite";
+import { Database } from "sqlite";
 import { Config, removeConfig } from "./config.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
 
 /**
  * [:url, :timestamp, :content, :parent]
  */
-export type DbCache = [string, number, string, string | undefined];
+export type DbCache = [string, number, string, string | null];
 
 export interface CacheItem {
   url: string;
   timestamp: number;
 }
 
-export function cleanCache(db: DB, invalidateCacheDate: number) {
+export function cleanCache(db: Database, invalidateCacheDate: number) {
   try {
-    db.query("DELETE FROM request_cache WHERE timestamp < :time", {
+    db.exec("DELETE FROM request_cache WHERE timestamp < :time", {
       time: invalidateCacheDate,
     });
   } catch (err) {
@@ -22,25 +22,25 @@ export function cleanCache(db: DB, invalidateCacheDate: number) {
   }
 }
 
-export function deleteCache(db: DB, path?: string) {
+export function deleteCache(db: Database, path?: string) {
   const query = path
     ? `DELETE FROM request_cache WHERE LIKE('%${path}?%',url)=1`
     : "DELETE FROM request_cache";
   try {
-    db.query(query);
+    db.exec(query);
   } catch (err) {
     console.error(err);
   }
 }
 
-export function cacheItems(db: DB) {
+export function cacheItems(db: Database) {
   const items: CacheItem[] = [];
 
-  const query = db.prepareQuery<[CacheItem["url"], CacheItem["timestamp"]]>(
+  const query = db.prepare(
     "SELECT url, timestamp FROM request_cache WHERE parent IS NULL",
   );
 
-  for (const [url, timestamp] of query.iter()) {
+  for (const { url, timestamp } of query.all(1)) {
     items.push({ url, timestamp });
   }
   query.finalize();
@@ -49,29 +49,25 @@ export function cacheItems(db: DB) {
 }
 
 export function requestFromCache(config: Config, url: string, column: string) {
-  const stmt = config.db.prepareQuery<
-    [string, string, string, number],
-    {
-      url: string;
-      content: string;
-      parent: string;
-      timestamp: number;
-    },
-    { url: string }
-  >(
+  const stmt = config.db.prepare(
     `SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`,
   );
-  const row = stmt.firstEntry({ url });
+  const row = stmt.get<{
+    url: string;
+    content: string;
+    parent: string;
+    timestamp: number;
+  }>({ url });
   stmt.finalize();
 
   return row;
 }
 
-export function updateCache(db: DB, data: DbCache) {
+export function updateCache(db: Database, data: DbCache) {
   try {
-    db.query(
-      "REPLACE INTO request_cache VALUES(:url, :timestamp, :content, :parent)",
-      data,
+    db.exec(
+      "REPLACE INTO request_cache VALUES(?,?,?,?)",
+      ...data,
     );
   } catch (err) {
     console.error(err);
@@ -112,7 +108,7 @@ async function recursiveDbCacheFetch<T>(
 
   if (row) {
     console.warn("Cache data found for:", row.url);
-    const lastChecked = new Date(row.timestamp).getTime();
+    const lastChecked = new Date(row.timestamp * 1000).getTime();
     const data = JSON.parse(row.content);
 
     // This is the initial request and the data looks stale

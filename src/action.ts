@@ -7,7 +7,7 @@ import { log } from "./helpers/log.ts";
 
 export default async function Action(query: string) {
   // In this case its up to the function being passed the
-  // DB to close the connect when finished.
+  // Database to close the connect when finished.
   const db = await dbConnect();
   const action = (name: string) => query.startsWith(name);
 
