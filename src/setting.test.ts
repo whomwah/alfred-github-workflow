@@ -3,7 +3,7 @@ import {
   returnsNext,
   stub,
 } from "https://deno.land/std@0.160.0/testing/mock.ts";
-import { DB } from "sqlite";
+import { Database } from "sqlite";
 import { CacheItem } from "./helpers/cache.ts";
 import { Config } from "./helpers/config.ts";
 import { queryArgs } from "./helpers/query.ts";
@@ -14,7 +14,7 @@ const config = {
   baseApiUrl: "https://api.github.com",
   baseGistUrl: "https://gist.github.com",
   perPage: 50,
-  db: "" as unknown as DB,
+  db: "" as unknown as Database,
 } as Config;
 
 Deno.test("When we have no access token", async (t) => {

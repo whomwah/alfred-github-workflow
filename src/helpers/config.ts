@@ -1,4 +1,4 @@
-import { DB } from "sqlite";
+import { Database } from "sqlite";
 import {
   cacheUpdateFrequency,
   TWENTY_FOUR_HOURS,
@@ -6,7 +6,7 @@ import {
 } from "./frequency.ts";
 
 export interface Config {
-  db: DB;
+  db: Database;
   // Github
   baseApiUrl: string;
   baseGistUrl: string;
@@ -23,7 +23,7 @@ export interface Config {
   updateFrequency: number;
 }
 
-export function prefetchConfig(db: DB) {
+export function prefetchConfig(db: Database) {
   const config: Config = {
     db,
     baseUrl: "https://github.com",
@@ -39,28 +39,30 @@ export function prefetchConfig(db: DB) {
       TWENTY_FOUR_HOURS * cacheUpdateFrequency(),
   };
 
-  for (const [key, value] of db.query("SELECT key, value FROM config")) {
-    if (key === "access_token") config["token"] = value as string;
-    if (key === "latestVersionLastChecked") {
-      config.latestVersionLastChecked = parseInt(value as string);
+  const query = db.prepare("SELECT key, value FROM config");
+
+  for (const row of query.all<Record<string, string>>(1)) {
+    if (row.key === "access_token") config["token"] = row.value;
+    if (row.key === "latestVersionLastChecked") {
+      config.latestVersionLastChecked = parseInt(row.value);
     }
-    if (key === "latestVersion") config.latestVersion = value as string;
+    if (row.key === "latestVersion") config.latestVersion = row.value;
   }
 
   return config;
 }
 
-export function removeConfig(db: DB, key: string) {
+export function removeConfig(db: Database, key: string) {
   try {
-    db.query("DELETE FROM config WHERE key = :key", { key });
+    db.exec("DELETE FROM config WHERE key = :key", { key });
   } catch (err) {
     console.error(err);
   }
 }
 
-export function storeConfig(db: DB, key: string, val: string) {
+export function storeConfig(db: Database, key: string, val: string) {
   try {
-    db.query("REPLACE INTO config VALUES(:key, :value)", { key, value: val });
+    db.exec("REPLACE INTO config VALUES(:key, :value)", { key, value: val });
   } catch (err) {
     console.error(err);
   }

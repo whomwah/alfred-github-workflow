@@ -4,6 +4,11 @@ set -e
 VERSION=$1
 NOTES=$2
 
+# Function to escape special characters for XML
+escape_for_xml() {
+  echo "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' -e "s/'/\&apos;/g"
+}
+
 echo "updating VERSION to $VERSION in info.plist... ✅"
 /usr/libexec/PlistBuddy -c "Set :version $VERSION" info.plist
 
@@ -25,7 +30,14 @@ To view other releases visit:
 https://github.com/whomwah/alfred-github-workflow/releases
 END
 )
-/usr/libexec/PlistBuddy -c "Set :readme  $readme$NOTES$finishup" info.plist
+
+# Escape NOTES content
+escaped_notes=$(escape_for_xml "$NOTES")
+
+# Combine readme, escaped notes, and finishup
+combined_notes="$readme$escaped_notes$finishup"
+
+/usr/libexec/PlistBuddy -c "Set :readme  $readme$escaped_notes$finishup" info.plist
 
 echo "bundle and minify workflow... ✅"
 deno bundle mod.ts | esbuild --minify-whitespace --minify-identifiers > mod.min.js
