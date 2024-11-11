@@ -9,8 +9,7 @@ const updateFrequencyOptions: FrequencyOptions = {
   yearly: 365,
 };
 
-// 24 hours as milliseconds (1000 * 60 * 60 * 24) => 86,400,000
-export const TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24;
+export const TWENTY_FOUR_HOURS = 60 * 60 * 24; // 24 hours in seconds
 
 export const updateFrequency = (
   freq: string = Deno.env.get("updateFrequency") || "weekly",

@@ -94,10 +94,10 @@ Deno.test("#updateAvailableItem", async (t) => {
   await t.step("it does check weekly minus 1 second ago", async () => {
     const fetchAndStore = stub(_internals, "fetchAndStore");
     const builder = { addItem: () => Promise.resolve() };
-    const timeEpoch = 1666000000000;
-    const time = new FakeTime(timeEpoch);
+    const timeEpoch = 1666000000; // in seconds
+    const time = new FakeTime(timeEpoch * 1000);
     // 7 days - 1 second ago
-    const lastChecked = timeEpoch - 1000 * 60 * 60 * 24 * 7 - 1;
+    const lastChecked = timeEpoch - 60 * 60 * 24 * 7 - 1;
 
     try {
       const config = {
@@ -108,7 +108,7 @@ Deno.test("#updateAvailableItem", async (t) => {
       } as Config;
       const update = await updateAvailableItem(builder, config);
       assertSpyCall(fetchAndStore, 0, {
-        args: [config, 1666000000000],
+        args: [config, timeEpoch],
       });
       assertEquals(update, undefined);
     } finally {
@@ -119,10 +119,10 @@ Deno.test("#updateAvailableItem", async (t) => {
 
   await t.step("it doesn't check weekly plus 1 second ago", async () => {
     const builder = { addItem: () => Promise.resolve() };
-    const timeEpoch = 1666000000000;
+    const timeEpoch = 1666000000; // in seconds
     const time = new FakeTime(timeEpoch);
     // 7 days and 1 second ago
-    const lastChecked = timeEpoch - 1000 * 60 * 60 * 24 * 7 + 1;
+    const lastChecked = timeEpoch - 60 * 60 * 24 * 7 + 1;
 
     try {
       const config = {
@@ -145,10 +145,10 @@ Deno.test("#updateAvailableItem", async (t) => {
       Deno.env.set("updateFrequency", "daily");
 
       const builder = { addItem: () => Promise.resolve() };
-      const timeEpoch = 1666000000000;
+      const timeEpoch = 1666000000; // in seconds
       const time = new FakeTime(timeEpoch);
       // 1 day and 1 second ago
-      const lastChecked = timeEpoch - 1000 * 60 * 60 * 24 * 1 + 1;
+      const lastChecked = timeEpoch - 60 * 60 * 24 * 1 + 1;
 
       try {
         const config = {

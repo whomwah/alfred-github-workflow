@@ -11,7 +11,7 @@ export async function updateAvailableItem(
   config: Config,
 ) {
   if (!config.checkForUpdates) return null;
-  const now = new Date().getTime();
+  const now = Math.floor(new Date().getTime() / 1000); // Convert to seconds
 
   await _internals.cacheRelease(now, config);
 
