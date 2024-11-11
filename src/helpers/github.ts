@@ -172,7 +172,7 @@ export async function fetchNewDataFromAPIandStore<T>(
   if ([200, 304].includes(response.status)) {
     updateCache(config.db, [
       url,
-      new Date().getTime(),
+      Math.floor(new Date().getTime() / 1000), // Convert to seconds
       JSON.stringify(data),
       urlToStore || null,
     ]);

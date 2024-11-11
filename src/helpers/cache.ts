@@ -108,7 +108,7 @@ async function recursiveDbCacheFetch<T>(
 
   if (row) {
     console.warn("Cache data found for:", row.url);
-    const lastChecked = new Date(row.timestamp * 1000).getTime();
+    const lastChecked = row.timestamp;
     const data = JSON.parse(row.content);
 
     // This is the initial request and the data looks stale

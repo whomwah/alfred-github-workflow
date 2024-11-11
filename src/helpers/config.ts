@@ -35,8 +35,9 @@ export function prefetchConfig(db: Database) {
     currentVersion: Deno.env.get("alfred_workflow_version") || "",
     latestVersion: "",
     latestVersionLastChecked: 0,
-    invalidateCacheDate: new Date().getTime() -
-      TWENTY_FOUR_HOURS * cacheUpdateFrequency(),
+    invalidateCacheDate: Math.floor(
+      new Date().getTime() / 1000 - TWENTY_FOUR_HOURS * cacheUpdateFrequency(),
+    ),
   };
 
   const query = db.prepare("SELECT key, value FROM config");
