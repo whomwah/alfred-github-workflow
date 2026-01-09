@@ -31,9 +31,12 @@ export default function Search(
   };
 
   const results = async () => {
-    const repos = await _internals.fetchRepos(config);
-    const users = await _internals.fetchUsers(config);
-    const stars = await _internals.fetchStars(config);
+    // Fetch all data sources in parallel for better performance
+    const [repos, users, stars] = await Promise.all([
+      _internals.fetchRepos(config),
+      _internals.fetchUsers(config),
+      _internals.fetchStars(config),
+    ]);
 
     return Promise.all([
       ...subCommands.map((cmd) => builder.addItem(cmd)),
