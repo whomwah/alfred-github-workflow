@@ -1,9 +1,6 @@
-import { assertEquals } from "https://deno.land/std@0.160.0/testing/asserts.ts";
-import {
-  assertSpyCall,
-  stub,
-} from "https://deno.land/std@0.160.0/testing/mock.ts";
-import { FakeTime } from "https://deno.land/std@0.160.0/testing/time.ts";
+import { assertEquals } from "@std/assert";
+import { assertSpyCall, stub } from "@std/testing/mock";
+import { FakeTime } from "@std/testing/time";
 import { Config } from "./config.ts";
 import { _internals, updateAvailableItem } from "./updateAvailable.ts";
 

@@ -1,9 +1,6 @@
-import { assertEquals } from "https://deno.land/std@0.160.0/testing/asserts.ts";
-import {
-  resolvesNext,
-  stub,
-} from "https://deno.land/std@0.160.0/testing/mock.ts";
-import { FakeTime } from "https://deno.land/std@0.160.0/testing/time.ts";
+import { assertEquals } from "@std/assert";
+import { resolvesNext, stub } from "@std/testing/mock";
+import { FakeTime } from "@std/testing/time";
 import { Database } from "sqlite";
 import { Config } from "./helpers/config.ts";
 import { GhGist } from "./helpers/github.ts";

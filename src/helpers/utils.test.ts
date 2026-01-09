@@ -1,7 +1,4 @@
-import {
-  assert,
-  assertEquals,
-} from "https://deno.land/std@0.160.0/testing/asserts.ts";
+import { assert, assertEquals } from "@std/assert";
 import { capitalize, fuzzyMatch, uniq } from "./utils.ts";
 import "../alfred.d.ts";
 
