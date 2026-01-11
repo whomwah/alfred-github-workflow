@@ -12,22 +12,22 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_AUTH_TOKEN }}
 
-      - uses: denoland/setup-deno@v1
+      - uses: denoland/setup-deno@v2
         with:
-          deno-version: v1.x # Run with latest stable Deno.
+          deno-version: v2.x # Run with latest stable Deno.
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Setup package.json
-        run: echo '{"name":"alfred-github-workflow", "devDependencies":{"esbuild":"^0.15.9","@semantic-release/git":"^10.0.1","@semantic-release/exec":"^6.0.3","semantic-release":"^19.0.5"}}' > package.json
+        run: echo '{"name":"alfred-github-workflow", "devDependencies":{"esbuild":"^0.25.0","@semantic-release/git":"^10.0.1","@semantic-release/exec":"^7.0.3","semantic-release":"^24.2.3"}}' > package.json
 
       - name: Install dependencies
         run: npm install
