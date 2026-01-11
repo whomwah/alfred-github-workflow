@@ -1,6 +1,6 @@
 import "../alfred.d.ts";
 import { fuzzyMatch } from "./utils.ts";
-import { createMd5Hash } from "./md5.ts";
+import { createHash } from "./md5.ts";
 import { Config } from "./config.ts";
 import { OAUTH_URL } from "../../env.ts";
 import { QueryArgs } from "./query.ts";
@@ -18,11 +18,11 @@ export interface BuildItem {
 }
 
 export interface BuilderType {
-  addItem: (item: BuildItem) => Promise<void>;
+  addItem: (item: BuildItem) => void;
 }
 
 export default function Builder(queryArgs: QueryArgs, items: Alfred.Item[]) {
-  const buildListItem = async (item: BuildItem): Promise<Alfred.Item> => {
+  const buildListItem = (item: BuildItem): Alfred.Item => {
     const icon = {
       path: item.icon ? `./icons/${item.icon}.png` : "./icon.png",
     };
@@ -34,7 +34,7 @@ export default function Builder(queryArgs: QueryArgs, items: Alfred.Item[]) {
       arg,
     };
 
-    if (!item.skipUID) payload.uid = await createMd5Hash(item.title);
+    if (!item.skipUID) payload.uid = createHash(item.title);
     if (item.subtitle) payload.subtitle = item.subtitle;
 
     if (item.autocomplete === false) {
@@ -51,12 +51,12 @@ export default function Builder(queryArgs: QueryArgs, items: Alfred.Item[]) {
   const addListItem = (item: Alfred.Item) => items.push(item);
 
   return {
-    addItem: async (item: BuildItem) => {
+    addItem: (item: BuildItem) => {
       if (
         item.skipMatch ||
         matches(item.matchStr || item.title, queryArgs.query)
       ) {
-        addListItem(await buildListItem(item));
+        addListItem(buildListItem(item));
       }
     },
   };

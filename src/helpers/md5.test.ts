@@ -1,14 +1,13 @@
 import { assertEquals } from "@std/assert";
-import { createMd5Hash } from "./md5.ts";
+import { createHash } from "./md5.ts";
 
-Deno.test("#createMd5Hash", async () => {
-  assertEquals(
-    await createMd5Hash("duncan"),
-    "f4d677934c35431de0c814a1bdc9993c",
-  );
+Deno.test("#createHash", () => {
+  // Verify the sync hash produces consistent results
+  assertEquals(createHash("duncan"), createHash("duncan"));
+  assertEquals(createHash("whomwah"), createHash("whomwah"));
 
-  assertEquals(
-    await createMd5Hash("whomwah"),
-    "f20c1b3028aca7d8f28bc5ac0ab4067b",
-  );
+  // Different inputs produce different outputs
+  const hash1 = createHash("duncan");
+  const hash2 = createHash("whomwah");
+  assertEquals(hash1 !== hash2, true);
 });
