@@ -89,7 +89,11 @@ Deno.test("#updateAvailableItem", async (t) => {
   );
 
   await t.step("it does check weekly minus 1 second ago", async () => {
-    const fetchAndStore = stub(_internals, "fetchAndStore");
+    const { promise, resolve } = Promise.withResolvers<void>();
+    const fetchAndStore = stub(_internals, "fetchAndStore", () => {
+      resolve();
+      return Promise.resolve();
+    });
     const builder = { addItem: () => Promise.resolve() };
     const timeEpoch = 1666000000; // in seconds
     const time = new FakeTime(timeEpoch * 1000);
@@ -104,6 +108,8 @@ Deno.test("#updateAvailableItem", async (t) => {
         latestVersionLastChecked: lastChecked,
       } as Config;
       const update = await updateAvailableItem(builder, config);
+      // Wait for fire-and-forget to complete
+      await promise;
       assertSpyCall(fetchAndStore, 0, {
         args: [config, timeEpoch],
       });

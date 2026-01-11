@@ -145,15 +145,18 @@ export interface GhGist {
   truncated: boolean;
 }
 
-export function fetchData(url: string, token?: string) {
+export function fetchData(url: string, token?: string, timeoutMs = 5000) {
   const uri = new URL(url);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   return fetch(uri, {
+    signal: controller.signal,
     headers: {
       Accept: "application/vnd.github.v3+json",
       Authorization: `Bearer ${token}`,
     },
-  });
+  }).finally(() => clearTimeout(timeoutId));
 }
 
 export async function fetchNewDataFromAPIandStore<T>(

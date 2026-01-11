@@ -6,14 +6,14 @@ import { fetchData, GhRelease } from "./github.ts";
 
 const workflowRepo = "whomwah/alfred-github-workflow";
 
-export async function updateAvailableItem(
+export function updateAvailableItem(
   builder: BuilderType,
   config: Config,
 ) {
   if (!config.checkForUpdates) return null;
   const now = Math.floor(new Date().getTime() / 1000); // Convert to seconds
 
-  await _internals.cacheRelease(now, config);
+  _internals.cacheRelease(now, config);
 
   try {
     const isValid = lessOrEqual(
@@ -49,12 +49,13 @@ async function fetchAndStore(config: Config, now: number) {
   storeConfig(config.db, "latestVersionLastChecked", String(now));
 }
 
-async function cacheRelease(now: number, config: Config) {
+function cacheRelease(now: number, config: Config) {
   const invalidateCacheDate = now - TWENTY_FOUR_HOURS * updateFrequency();
   const lastChecked = config.latestVersionLastChecked;
 
   if (lastChecked < invalidateCacheDate) {
-    await _internals.fetchAndStore(config, now);
+    // Fire-and-forget: don't block the workflow on update check
+    _internals.fetchAndStore(config, now).catch(console.error);
   }
 }
 
