@@ -21,8 +21,12 @@ export function fuzzyMatch(haystack: string, needle: string) {
 }
 
 export function uniq(list: Alfred.Item[]) {
-  const ids = list.map((o) => o.uid);
-  return list.filter(({ uid }, index) => !ids.includes(uid, index + 1));
+  const seen = new Set<string | undefined>();
+  return list.filter(({ uid }) => {
+    if (seen.has(uid)) return false;
+    seen.add(uid);
+    return true;
+  });
 }
 
 export function capitalize(str: string) {
