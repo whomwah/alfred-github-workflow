@@ -16,17 +16,17 @@ notifications, and more from Alfred.
 
 Use `just` to run commands. See `justfile` for available recipes.
 
-| Task                    | Command                                  |
-| ----------------------- | ---------------------------------------- |
-| List all commands       | `just`                                   |
-| Run all tests           | `just test`                              |
-| Run single test file    | `just test src/mine.test.ts`             |
-| Run test by name        | `just test --filter "test name"`         |
-| Run tests in watch mode | `just test --watch`                      |
-| Format code             | `just fmt`                               |
-| Check formatting        | `just fmt-check`                         |
-| Lint                    | `just lint`                              |
-| Run all CI checks       | `just ci`                                |
+| Task                    | Command                          |
+| ----------------------- | -------------------------------- |
+| List all commands       | `just`                           |
+| Run all tests           | `just test`                      |
+| Run single test file    | `just test src/mine.test.ts`     |
+| Run test by name        | `just test --filter "test name"` |
+| Run tests in watch mode | `just test --watch`              |
+| Format code             | `just fmt`                       |
+| Check formatting        | `just fmt-check`                 |
+| Lint                    | `just lint`                      |
+| Run all CI checks       | `just ci`                        |
 
 ### CI Pipeline
 
