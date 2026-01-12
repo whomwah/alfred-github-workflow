@@ -52,11 +52,32 @@ export interface CacheItem {
   timestamp: number;
 }
 
-export function cleanCache(db: Database, invalidateCacheDate: number) {
+/**
+ * Clean stale cache entries for a specific endpoint.
+ * Uses the base URL (without query params) to match all paginated entries.
+ * This prevents race conditions when multiple endpoints are fetched in parallel.
+ */
+export function cleanCache(
+  db: Database,
+  invalidateCacheDate: number,
+  endpointUrl?: string,
+) {
   try {
-    db.exec("DELETE FROM request_cache WHERE timestamp < :time", {
-      time: invalidateCacheDate,
-    });
+    // Extract the base path from the URL (e.g., "/user/repos" from full URL)
+    // This will match all paginated entries for this endpoint
+    let urlPattern = "%";
+    if (endpointUrl) {
+      const url = new URL(endpointUrl);
+      urlPattern = `%${url.pathname}%`;
+    }
+
+    db.exec(
+      "DELETE FROM request_cache WHERE timestamp < :time AND url LIKE :pattern",
+      {
+        time: invalidateCacheDate,
+        pattern: urlPattern,
+      },
+    );
   } catch (err) {
     console.error(err);
   }
@@ -152,16 +173,13 @@ async function recursiveDbCacheFetch<T>(
   };
 
   if (row) {
-    console.warn("Cache data found for:", row.url);
     const lastChecked = row.timestamp;
     const data = JSON.parse(row.content);
 
     // This is the initial request and the data looks stale
     if (initialPage && lastChecked < config.invalidateCacheDate) {
-      console.warn("We should fetch some new data! as this is OLD");
-
-      // clear any stale data
-      cleanCache(config.db, config.invalidateCacheDate);
+      // clear stale data for this specific endpoint only (not all endpoints)
+      cleanCache(config.db, config.invalidateCacheDate, url);
 
       // fetch fresh data from the API
       await apiFetch();
@@ -174,8 +192,6 @@ async function recursiveDbCacheFetch<T>(
     }
   } else {
     if (initialPage) {
-      console.warn("Empty data cache! Initiating API fetch...");
-
       // fetch fresh data from the API
       await apiFetch();
     }

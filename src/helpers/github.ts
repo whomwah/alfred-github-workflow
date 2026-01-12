@@ -165,7 +165,6 @@ export async function fetchNewDataFromAPIandStore<T>(
   results: T[],
   urlToStore?: string,
 ): Promise<void> {
-  console.warn("fetchNewDataFromAPIandStore:", { url, urlToStore });
   const response = await fetchData(url, config.token);
   const data: T | T[] = await response.json();
   const linkMatch: RegExpMatchArray | null | undefined = response.headers
@@ -186,6 +185,6 @@ export async function fetchNewDataFromAPIandStore<T>(
       return fetchNewDataFromAPIandStore(config, linkMatch[1], results, url);
     }
   } else {
-    console.warn("Invalid Github Response:", data);
+    console.warn("Invalid Github Response:", { status: response.status, data });
   }
 }
