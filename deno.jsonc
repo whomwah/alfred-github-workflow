@@ -1,10 +1,13 @@
 {
   "imports": {
+    "@std/assert": "jsr:@std/assert",
     "@std/crypto": "jsr:@std/crypto",
     "@std/fs": "jsr:@std/fs",
-    "@std/semver": "jsr:@std/semver",
-    "@std/path": "jsr:@std/path",
     "@std/io/write-all": "jsr:@std/io/write-all",
+    "@std/path": "jsr:@std/path",
+    "@std/semver": "jsr:@std/semver",
+    "@std/testing/mock": "jsr:@std/testing/mock",
+    "@std/testing/time": "jsr:@std/testing/time",
     "sqlite": "jsr:@db/sqlite"
   },
   "tasks": {

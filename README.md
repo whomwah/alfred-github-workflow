@@ -77,13 +77,47 @@ configurable options.
 
 You will first need to install `deno` as mentioned earlier in this README.
 
+This project uses [just](https://github.com/casey/just) as a command runner. To
+see all available tasks:
+
+```bash
+just
+```
+
 ### Tests
 
-`deno run test`
+```bash
+just test
+
+# Run a specific test file
+just test src/mine.test.ts
+
+# Run tests matching a name
+just test --filter "test name"
+```
 
 ### Formatting
 
-`deno fmt`
+```bash
+just fmt
+
+# Check formatting without changes
+just fmt-check
+```
+
+### Linting
+
+```bash
+just lint
+```
+
+### CI Checks
+
+Run all checks (format, lint, test):
+
+```bash
+just ci
+```
 
 ### Local dev on an installed workflow
 
@@ -100,12 +134,12 @@ to this folder by right clicking on the workflow in Alfred and choosing
 
 You can also build your own version of the workflow with:
 
-```
-./bin/build_release <version>
+```bash
+just build-release <version> [notes]
 
 # example
-
-./bin/build_release 1.2.3
+just build-release 1.2.3
+just build-release 1.2.3 "Fixed notification bug"
 ```
 
 ## Resources
