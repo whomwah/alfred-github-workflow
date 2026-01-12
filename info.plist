@@ -307,12 +307,12 @@ https://github.com/whomwah/alfred-github-workflow
 
 #### Latest Release
 
-## [1.11.3](https://github.com/whomwah/alfred-github-workflow/compare/v1.11.2...v1.11.3) (2026-01-12)
+# [1.12.0](https://github.com/whomwah/alfred-github-workflow/compare/v1.11.3...v1.12.0) (2026-01-12)
 
 
-### Bug Fixes
+### Features
 
-* **updateAvailable:** stub async cacheRelease and fetchAndStore ([7010b66](https://github.com/whomwah/alfred-github-workflow/commit/7010b666291dee694db07c693bb23e2151d0111d))
+* **helpers/cache:** Cache for prepared statements ([5dca4d7](https://github.com/whomwah/alfred-github-workflow/commit/5dca4d7e3380c5c5d487c562d2fba4c5d5fed114))
 
 To view other releases visit:
 https://github.com/whomwah/alfred-github-workflow/releases</string>
@@ -471,7 +471,7 @@ https://github.com/whomwah/alfred-github-workflow/releases</string>
 		<string>mod.min.js</string>
 	</dict>
 	<key>version</key>
-	<string>1.11.3</string>
+	<string>1.12.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/whomwah/alfred-github-workflow</string>
 </dict>
