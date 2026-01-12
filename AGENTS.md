@@ -14,15 +14,19 @@ notifications, and more from Alfred.
 
 ## Build/Lint/Test Commands
 
-| Task                    | Command                                      |
-| ----------------------- | -------------------------------------------- |
-| Run all tests           | `deno test --allow-env`                      |
-| Run single test file    | `deno test --allow-env src/mine.test.ts`     |
-| Run test by name        | `deno test --allow-env --filter "test name"` |
-| Run tests in watch mode | `deno test --allow-env --watch`              |
-| Format code             | `deno fmt`                                   |
-| Check formatting        | `deno fmt --check`                           |
-| Lint                    | `deno lint`                                  |
+Use `just` to run commands. See `justfile` for available recipes.
+
+| Task                    | Command                          |
+| ----------------------- | -------------------------------- |
+| List all commands       | `just`                           |
+| Run all tests           | `just test`                      |
+| Run single test file    | `just test src/mine.test.ts`     |
+| Run test by name        | `just test --filter "test name"` |
+| Run tests in watch mode | `just test --watch`              |
+| Format code             | `just fmt`                       |
+| Check formatting        | `just fmt-check`                 |
+| Lint                    | `just lint`                      |
+| Run all CI checks       | `just ci`                        |
 
 ### CI Pipeline
 
@@ -30,7 +34,7 @@ Tests run on `macos-latest` and must pass before merging:
 
 1. `deno fmt --check`
 2. `deno lint`
-3. `deno test --allow-env`
+3. `deno test --allow-env --allow-read --allow-write --allow-ffi --allow-net`
 
 ## Commit Messages
 

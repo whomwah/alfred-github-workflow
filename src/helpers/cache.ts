@@ -1,4 +1,4 @@
-import { Database } from "sqlite";
+import { Database, Statement } from "sqlite";
 import { Config, removeConfig } from "./config.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
 
@@ -7,16 +7,77 @@ import { fetchNewDataFromAPIandStore } from "./github.ts";
  */
 export type DbCache = [string, number, string, string | null];
 
+/**
+ * Cache for prepared statements to avoid repeated prepare/finalize overhead.
+ * Uses WeakMap with Database instance as key to allow garbage collection.
+ */
+const statementCache = new WeakMap<Database, Map<string, Statement>>();
+
+/**
+ * Get or create a cached prepared statement for cache lookups.
+ */
+function getCachedStatement(db: Database, column: string): Statement {
+  let dbCache = statementCache.get(db);
+  if (!dbCache) {
+    dbCache = new Map();
+    statementCache.set(db, dbCache);
+  }
+
+  let stmt = dbCache.get(column);
+  if (!stmt) {
+    stmt = db.prepare(
+      `SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`,
+    );
+    dbCache.set(column, stmt);
+  }
+  return stmt;
+}
+
+/**
+ * Cleanup cached statements for a database.
+ * Call this when closing the database to prevent memory leaks.
+ */
+export function cleanupStatementCache(db: Database) {
+  const dbCache = statementCache.get(db);
+  if (dbCache) {
+    for (const stmt of dbCache.values()) {
+      stmt.finalize();
+    }
+    statementCache.delete(db);
+  }
+}
+
 export interface CacheItem {
   url: string;
   timestamp: number;
 }
 
-export function cleanCache(db: Database, invalidateCacheDate: number) {
+/**
+ * Clean stale cache entries for a specific endpoint.
+ * Uses the base URL (without query params) to match all paginated entries.
+ * This prevents race conditions when multiple endpoints are fetched in parallel.
+ */
+export function cleanCache(
+  db: Database,
+  invalidateCacheDate: number,
+  endpointUrl?: string,
+) {
   try {
-    db.exec("DELETE FROM request_cache WHERE timestamp < :time", {
-      time: invalidateCacheDate,
-    });
+    // Extract the base path from the URL (e.g., "/user/repos" from full URL)
+    // This will match all paginated entries for this endpoint
+    let urlPattern = "%";
+    if (endpointUrl) {
+      const url = new URL(endpointUrl);
+      urlPattern = `%${url.pathname}%`;
+    }
+
+    db.exec(
+      "DELETE FROM request_cache WHERE timestamp < :time AND url LIKE :pattern",
+      {
+        time: invalidateCacheDate,
+        pattern: urlPattern,
+      },
+    );
   } catch (err) {
     console.error(err);
   }
@@ -49,16 +110,13 @@ export function cacheItems(db: Database) {
 }
 
 export function requestFromCache(config: Config, url: string, column: string) {
-  const stmt = config.db.prepare(
-    `SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`,
-  );
+  const stmt = getCachedStatement(config.db, column);
   const row = stmt.get<{
     url: string;
     content: string;
     parent: string;
     timestamp: number;
   }>({ url });
-  stmt.finalize();
 
   return row;
 }
@@ -77,6 +135,14 @@ export function updateCache(db: Database, data: DbCache) {
 export function cacheFetchAll<T>(config: Config, url: string): Promise<T[]> {
   return recursiveDbCacheFetch<T>(url, [], config, true);
 }
+
+/**
+ * Expose internals for testing
+ */
+export const _internals = {
+  statementCache,
+  getCachedStatement,
+};
 
 async function recursiveDbCacheFetch<T>(
   url: string,
@@ -107,16 +173,13 @@ async function recursiveDbCacheFetch<T>(
   };
 
   if (row) {
-    console.warn("Cache data found for:", row.url);
     const lastChecked = row.timestamp;
     const data = JSON.parse(row.content);
 
     // This is the initial request and the data looks stale
     if (initialPage && lastChecked < config.invalidateCacheDate) {
-      console.warn("We should fetch some new data! as this is OLD");
-
-      // clear any stale data
-      cleanCache(config.db, config.invalidateCacheDate);
+      // clear stale data for this specific endpoint only (not all endpoints)
+      cleanCache(config.db, config.invalidateCacheDate, url);
 
       // fetch fresh data from the API
       await apiFetch();
@@ -129,8 +192,6 @@ async function recursiveDbCacheFetch<T>(
     }
   } else {
     if (initialPage) {
-      console.warn("Empty data cache! Initiating API fetch...");
-
       // fetch fresh data from the API
       await apiFetch();
     }
