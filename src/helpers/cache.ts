@@ -1,4 +1,4 @@
-import { Database } from "sqlite";
+import { Database, Statement } from "sqlite";
 import { Config, removeConfig } from "./config.ts";
 import { fetchNewDataFromAPIandStore } from "./github.ts";
 
@@ -6,6 +6,46 @@ import { fetchNewDataFromAPIandStore } from "./github.ts";
  * [:url, :timestamp, :content, :parent]
  */
 export type DbCache = [string, number, string, string | null];
+
+/**
+ * Cache for prepared statements to avoid repeated prepare/finalize overhead.
+ * Uses WeakMap with Database instance as key to allow garbage collection.
+ */
+const statementCache = new WeakMap<Database, Map<string, Statement>>();
+
+/**
+ * Get or create a cached prepared statement for cache lookups.
+ */
+function getCachedStatement(db: Database, column: string): Statement {
+  let dbCache = statementCache.get(db);
+  if (!dbCache) {
+    dbCache = new Map();
+    statementCache.set(db, dbCache);
+  }
+
+  let stmt = dbCache.get(column);
+  if (!stmt) {
+    stmt = db.prepare(
+      `SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`,
+    );
+    dbCache.set(column, stmt);
+  }
+  return stmt;
+}
+
+/**
+ * Cleanup cached statements for a database.
+ * Call this when closing the database to prevent memory leaks.
+ */
+export function cleanupStatementCache(db: Database) {
+  const dbCache = statementCache.get(db);
+  if (dbCache) {
+    for (const stmt of dbCache.values()) {
+      stmt.finalize();
+    }
+    statementCache.delete(db);
+  }
+}
 
 export interface CacheItem {
   url: string;
@@ -49,16 +89,13 @@ export function cacheItems(db: Database) {
 }
 
 export function requestFromCache(config: Config, url: string, column: string) {
-  const stmt = config.db.prepare(
-    `SELECT url, content, parent, timestamp FROM request_cache WHERE ${column} = :url`,
-  );
+  const stmt = getCachedStatement(config.db, column);
   const row = stmt.get<{
     url: string;
     content: string;
     parent: string;
     timestamp: number;
   }>({ url });
-  stmt.finalize();
 
   return row;
 }
@@ -77,6 +114,14 @@ export function updateCache(db: Database, data: DbCache) {
 export function cacheFetchAll<T>(config: Config, url: string): Promise<T[]> {
   return recursiveDbCacheFetch<T>(url, [], config, true);
 }
+
+/**
+ * Expose internals for testing
+ */
+export const _internals = {
+  statementCache,
+  getCachedStatement,
+};
 
 async function recursiveDbCacheFetch<T>(
   url: string,
