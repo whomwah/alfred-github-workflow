@@ -17,7 +17,11 @@ Deno.test("#updateAvailableItem", async (t) => {
   await t.step(
     "it handles when current version is 1.0.0 and latest 1.0.0",
     async () => {
-      const cacheRelease = stub(_internals, "cacheRelease");
+      const cacheRelease = stub(
+        _internals,
+        "cacheRelease",
+        () => Promise.resolve(),
+      );
 
       try {
         const config = {
@@ -37,7 +41,11 @@ Deno.test("#updateAvailableItem", async (t) => {
   await t.step(
     "it handles when current version is 1.0.0 and latest 0.9.0",
     async () => {
-      const cacheRelease = stub(_internals, "cacheRelease");
+      const cacheRelease = stub(
+        _internals,
+        "cacheRelease",
+        () => Promise.resolve(),
+      );
 
       try {
         const config = {
@@ -57,7 +65,11 @@ Deno.test("#updateAvailableItem", async (t) => {
   await t.step(
     "it handles when current version is 1.0.0 and latest 2.0.0",
     async () => {
-      const cacheRelease = stub(_internals, "cacheRelease");
+      const cacheRelease = stub(
+        _internals,
+        "cacheRelease",
+        () => Promise.resolve(),
+      );
       const builder = { addItem: () => Promise.resolve() };
       const buildStub = stub(builder, "addItem");
 
@@ -89,11 +101,11 @@ Deno.test("#updateAvailableItem", async (t) => {
   );
 
   await t.step("it does check weekly minus 1 second ago", async () => {
-    const { promise, resolve } = Promise.withResolvers<void>();
-    const fetchAndStore = stub(_internals, "fetchAndStore", () => {
-      resolve();
-      return Promise.resolve();
-    });
+    const fetchAndStore = stub(
+      _internals,
+      "fetchAndStore",
+      () => Promise.resolve(),
+    );
     const builder = { addItem: () => Promise.resolve() };
     const timeEpoch = 1666000000; // in seconds
     const time = new FakeTime(timeEpoch * 1000);
@@ -108,8 +120,6 @@ Deno.test("#updateAvailableItem", async (t) => {
         latestVersionLastChecked: lastChecked,
       } as Config;
       const update = await updateAvailableItem(builder, config);
-      // Wait for fire-and-forget to complete
-      await promise;
       assertSpyCall(fetchAndStore, 0, {
         args: [config, timeEpoch],
       });
