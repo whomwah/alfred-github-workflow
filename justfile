@@ -4,7 +4,7 @@ default:
 
 # Run all tests
 test *ARGS:
-    deno test --allow-env {{ ARGS }}
+    deno test --allow-env --allow-read --allow-write --allow-ffi --allow-net {{ ARGS }}
 
 # Format code
 fmt *ARGS:
